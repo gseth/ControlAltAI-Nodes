@@ -1,13 +1,14 @@
 [project]
-name = "comfyui-controlaltai-nodes"
+name = "comfyui_controlaltai_nodes"
 description = "Quality fo Life Nodes from ControlAltAI. Flux Resolution Calculator and Sampler."
 version = "1.0.0"
-license = { file = "LICENSE" }
+license = {file = "LICENSE"}
 
 [project.urls]
-Repository = "https://github.com/gseth/ControlAltAI-Nodes/"
+Repository = "https://github.com/gseth/ControlAltAI-Nodes"
+#  Used by Comfy Registry https://comfyregistry.org
 
 [tool.comfy]
-PublisherId = "ControlAltAI"
-DisplayName = "ControlAltAI Nodes"
+PublisherId = "controlaltai"
+DisplayName = "ComfyUI_ControlAltAI_Nodes"
 Icon = ""
