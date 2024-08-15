@@ -4,8 +4,6 @@ This repository contains custom nodes designed for the ComfyUI framework, focusi
 
 ## Nodes
 
-![ComfyUI Screenshot](https://gseth.com/images/SNAG-3894.png)
-
 ### Flux Resolution Calculator
 
 The Flux Resolution Calculator is designed to work with the Flux model, which operates based on megapixels rather than standard SDXL resolutions. This node calculates the resolution according to the defined megapixels and the selected aspect ratio.
@@ -20,6 +18,8 @@ The Flux Sampler node combines the functionality of the CustomSamplerAdvance nod
 - **CFG Setting:** The CFG is fixed at 1.
 - **Conditioning Input:** Only positive conditioning is supported.
 - **Compatibility:** Only the samplers and schedulers compatible with the Flux model are included.
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-3894.png)
 
 ## YouTube ComfyUI Tutorials
 
