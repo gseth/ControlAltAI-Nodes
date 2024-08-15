@@ -26,9 +26,8 @@ The Flux Sampler node combines the functionality of the CustomSamplerAdvance nod
 We are a team of two and create extensive tutorials for ComfyUI. Check out our YouTube channel:
 
 <a href="https://youtube.com/@controlaltai" style="display: inline-block; vertical-align: middle;">
-  <img src="https://gseth.com/images/Youtube.svg" alt="YouTube Logo" width="20">
-</a>
-[**ControlAltAI**](https://youtube.com/@controlaltai)
+  <img src="https://gseth.com/images/Youtube.svg" alt="YouTube Logo" width="50">
+</a> [**ControlAltAI**](https://youtube.com/@controlaltai)
 
 ## License
 
