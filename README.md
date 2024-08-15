@@ -1,8 +1,12 @@
+[![YouTube](https://gseth.com/images/YouTube_Logo_2017?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@controlaltai)
+
 # ComfyUI ControlAltAI Nodes
 
 This repository contains custom nodes designed for the ComfyUI framework, focusing on quality-of-life improvements. These nodes aim to make tasks easier and more efficient. Currently, two Flux nodes are available that enhance functionality and streamline workflows within ComfyUI.
 
 ## Nodes
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-3894.png)
 
 ### Flux Resolution Calculator
 
