@@ -1,5 +1,5 @@
 [project]
-name = "ControlAltAI Nodes"
+name = "comfyui-controlaltai-nodes"
 description = "Quality fo Life Nodes from ControlAltAI. Flux Resolution Calculator and Sampler."
 version = "1.0.0"
 license = { file = "LICENSE" }
