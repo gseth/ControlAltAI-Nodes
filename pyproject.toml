@@ -1,11 +1,11 @@
 [project]
 name = "ControlAltAI Nodes"
-description = "Quality fo Life Nodes from ControlAltAI. FLux Resolution Calculator and Sampler."
+description = "Quality fo Life Nodes from ControlAltAI. Flux Resolution Calculator and Sampler."
 version = "1.0.0"
 license = { file = "LICENSE" }
 
 [project.urls]
-Repository = "https://github.com/pythongosssss/ComfyUI-Custom-Scripts"
+Repository = "https://github.com/gseth/ControlAltAI-Nodes/"
 
 [tool.comfy]
 PublisherId = "ControlAltAI"
