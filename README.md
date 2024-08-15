@@ -1,5 +1,3 @@
-[![YouTube](https://gseth.com/images/YouTube_Logo_2017.svg)](https://www.youtube.com/@controlaltai)
-
 # ComfyUI ControlAltAI Nodes
 
 This repository contains custom nodes designed for the ComfyUI framework, focusing on quality-of-life improvements. These nodes aim to make tasks easier and more efficient. Currently, two Flux nodes are available that enhance functionality and streamline workflows within ComfyUI.
@@ -22,6 +20,12 @@ The Flux Sampler node combines the functionality of the CustomSamplerAdvance nod
 - **CFG Setting:** The CFG is fixed at 1.
 - **Conditioning Input:** Only positive conditioning is supported.
 - **Compatibility:** Only the samplers and schedulers compatible with the Flux model are included.
+
+## YouTube ComfyUI Tutorials
+
+We are a team of two and create extensive tutorials for ComfyUI. Check out our YouTube channel:
+
+[![YouTube Logo](https://gseth.com/Youtube_logo.png)](https://youtube.com/@controlaltai) [**ControlAltAI**](https://youtube.com/@controlaltai)
 
 ## License
 
