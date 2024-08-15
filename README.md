@@ -1,4 +1,4 @@
-[![YouTube](https://gseth.com/images/YouTube_Logo_2017?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@controlaltai)
+[![YouTube](https://gseth.com/images/YouTube_Logo_2017.svg)](https://www.youtube.com/@controlaltai)
 
 # ComfyUI ControlAltAI Nodes
 
