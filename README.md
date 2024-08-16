@@ -6,7 +6,7 @@ This repository contains custom nodes designed for the ComfyUI framework, focusi
 
 ### Flux Resolution Calculator
 
-The Flux Resolution Calculator is designed to work with the Flux model, which operates based on megapixels rather than standard SDXL resolutions. This node calculates the resolution according to the defined megapixels and the selected aspect ratio.
+The Flux Resolution Calculator is designed to determine the optimal image resolution for outputs generated using the Flux model, which is notably more oriented towards megapixels. Unlike traditional methods that rely on standard SDXL resolutions, this calculator operates based on user-specified megapixel inputs. Users can select their desired megapixel count, ranging from 0.1 to 2.0 megapixels, and aspect ratio. The calculator then provides the exact image dimensions necessary for optimal performance with the Flux model. This approach ensures that the generated images meet specific quality and size requirements tailored to the user's needs. Additionally, while the official limit is 2.0 megapixels, during testing, I have successfully generated images at higher resolutions, indicating the model's flexibility in accommodating various image dimensions without compromising quality.
 
 - **Supported Megapixels:** 0.1 MP, 1.0 MP, 2.0 MP, 2.1 MP, 2.2 MP, 2.3 MP, 2.4MP, 2.5MP
 - **Note:** Generations above 1 MP may appear slightly blurry, but resolutions of 3k+ have been successfully tested on the Flux1.Dev model.
@@ -25,6 +25,13 @@ The Flux Sampler node combines the functionality of the CustomSamplerAdvance nod
 
 We are a team of two and create extensive tutorials for ComfyUI. Check out our YouTube channel:</br>
 <a href="https://youtube.com/@controlaltai">ControlAltAI YouTube Tutorials</a>
+
+## Black Forest Labs AI
+
+Black Forest Labs, a pioneering AI research organization, has developed the Flux model series, which includes the Flux1.[dev] and Flux1.[schnell] models. These models are designed to push the boundaries of image generation through advanced deep-learning techniques.
+
+For more details on these models, their capabilities, and licensing information, you can visit the <a href="https://blackforestlabs.ai/">Black Forest Labs website</a>
+
 
 ## License
 
