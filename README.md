@@ -33,6 +33,11 @@ Black Forest Labs, a pioneering AI research organization, has developed the Flux
 For more details on these models, their capabilities, and licensing information, you can visit the <a href="https://blackforestlabs.ai/">Black Forest Labs website</a>
 
 
+## Apply ControlNet Node
+
+The Apply ControlNet Node is a placeholder node compatible with the Flux Sampler. ControlNet won't work at the moment. The ControlNets from XLabs AI are quite different, and their nodes use a transformer-based architecture. https://github.com/XLabs-AI/x-flux-comfyui
+
+
 ## License
 
 This project is licensed under the MIT License.
