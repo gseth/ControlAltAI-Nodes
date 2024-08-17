@@ -4,7 +4,7 @@ import comfy.sample
 import latent_preview
 
 FLUX_SAMPLER_NAMES = [
-    "euler", "heun", "heunpp2", "dpm_2", "dpm_2_ancestral", "lms", "dpmpp_2m", 
+    "euler", "heun", "heunpp2", "dpm_2", "lms", "dpmpp_2m", 
     "ipndm", "ipndm_v", "deis", "ddim", "uni_pc", "uni_pc_bh2"
 ]
 
@@ -18,11 +18,11 @@ class FluxSampler:
                 "model": ("MODEL",),
                 "conditioning": ("CONDITIONING",),
                 "latent_image": ("LATENT",),
-                "sampler_name": (FLUX_SAMPLER_NAMES,),
-                "scheduler": (FLUX_SCHEDULER_NAMES,),
-                "steps": ("INT", {"default": 20, "min": 1, "max": 10000}),
+                "sampler_name": (FLUX_SAMPLER_NAMES, {"default": "heunpp2"}),
+                "scheduler": (FLUX_SCHEDULER_NAMES, {"default": "beta"}),
+                "steps": ("INT", {"default": 42, "min": 1, "max": 10000}),
                 "denoise": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.01}),
-                "noise_seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
+                "noise_seed": ("INT", {"default": 143220275975594, "min": 0, "max": 0xffffffffffffffff}),
             }
         }
 
@@ -33,32 +33,28 @@ class FluxSampler:
 
     def sample(self, model, conditioning, latent_image, sampler_name, scheduler, steps, denoise, noise_seed):
         device = comfy.model_management.get_torch_device()
-        
-        # Create sampler
         sampler = comfy.samplers.KSampler(model, steps=steps, device=device, sampler=sampler_name, scheduler=scheduler, denoise=denoise)
-        
-        # Prepare latent
+
         latent = latent_image.copy()
         latent_image = latent["samples"]
-        
-        # Prepare noise
+
+        # Handle noise_mask if present
+        noise_mask = latent.get("noise_mask", None)
+
         noise = comfy.sample.prepare_noise(latent_image, noise_seed)
         
-        # Prepare conditioning
         positive = conditioning
         negative = []  # Empty list for negative conditioning
-        
-        # Sampling
+
         callback = latent_preview.prepare_callback(model, steps)
         disable_pbar = not comfy.utils.PROGRESS_BAR_ENABLED
 
-        samples = sampler.sample(noise, positive, negative, cfg=1.0, latent_image=latent_image, 
-                                 force_full_denoise=True, denoise_mask=None, callback=callback, 
+        samples = sampler.sample(noise, positive, negative, cfg=1.0, latent_image=latent_image,
+                                 force_full_denoise=True, denoise_mask=noise_mask, callback=callback,
                                  disable_pbar=disable_pbar, seed=noise_seed)
 
         out = latent.copy()
         out["samples"] = samples
-
         return (out,)
 
 NODE_CLASS_MAPPINGS = {
