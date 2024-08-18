@@ -1,6 +1,6 @@
 # ComfyUI ControlAltAI Nodes
 
-This repository contains custom nodes designed for the ComfyUI framework, focusing on quality-of-life improvements. These nodes aim to make tasks easier and more efficient. Currently, two Flux nodes are available that enhance functionality and streamline workflows within ComfyUI.
+This repository contains custom nodes designed for the ComfyUI framework, focusing on quality-of-life improvements. These nodes aim to make tasks easier and more efficient. Two Flux nodes are available to enhance functionality and streamline workflows within ComfyUI.
 
 ## Nodes
 
@@ -31,6 +31,11 @@ We are a team of two and create extensive tutorials for ComfyUI. Check out our Y
 Black Forest Labs, a pioneering AI research organization, has developed the Flux model series, which includes the Flux1.[dev] and Flux1.[schnell] models. These models are designed to push the boundaries of image generation through advanced deep-learning techniques.
 
 For more details on these models, their capabilities, and licensing information, you can visit the <a href="https://blackforestlabs.ai/">Black Forest Labs website</a>
+
+
+## Apply ControlNet Node
+
+The Apply ControlNet Node is a placeholder node compatible with the Flux Sampler. ControlNet won't work at the moment. The ControlNets from XLabs AI are quite different, and their nodes use a transformer-based architecture. https://github.com/XLabs-AI/x-flux-comfyui
 
 
 ## License
