@@ -1,7 +1,7 @@
 [project]
 name = "comfyui_controlaltai_nodes"
-description = "Quality fo Life Nodes from ControlAltAI. Flux Resolution Calculator and Sampler."
-version = "1.0.1"
+description = "Quality fo Life Nodes from ControlAltAI. Flux Resolution Calculator, FLux Sampler, Boolean Logic."
+version = "1.0.2"
 license = {file = "LICENSE"}
 
 [project.urls]
