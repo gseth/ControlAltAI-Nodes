@@ -19,7 +19,7 @@ The Flux Sampler node combines the functionality of the CustomSamplerAdvance nod
 - **Conditioning Input:** Only positive conditioning is supported.
 - **Compatibility:** Only the samplers and schedulers compatible with the Flux model are included.
 
-![ComfyUI Screenshot](https://gseth.com/images/SNAG-3894.png)
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-3923.png)
 
 ## YouTube ComfyUI Tutorials
 
