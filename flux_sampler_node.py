@@ -18,9 +18,9 @@ class FluxSampler:
                 "model": ("MODEL",),
                 "conditioning": ("CONDITIONING",),
                 "latent_image": ("LATENT",),
-                "sampler_name": (FLUX_SAMPLER_NAMES, {"default": "heunpp2"}),
+                "sampler_name": (FLUX_SAMPLER_NAMES, {"default": "euler"}),
                 "scheduler": (FLUX_SCHEDULER_NAMES, {"default": "beta"}),
-                "steps": ("INT", {"default": 42, "min": 1, "max": 10000}),
+                "steps": ("INT", {"default": 30, "min": 1, "max": 10000}),
                 "denoise": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.01}),
                 "noise_seed": ("INT", {"default": 143220275975594, "min": 0, "max": 0xffffffffffffffff}),
             }
