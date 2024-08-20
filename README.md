@@ -4,6 +4,15 @@ This repository contains custom nodes designed for the ComfyUI framework, focusi
 
 ## Nodes
 
+###List of Nodes:
+- FLux
+  - Flux Resolution Calculator
+  - Flux Sampler
+  - Flux ControlNet (work in progress)
+- Logic
+  - Boolean Basic
+  - Boolean Reverse
+
 ### Flux Resolution Calculator
 
 The Flux Resolution Calculator is designed to determine the optimal image resolution for outputs generated using the Flux model, which is notably more oriented towards megapixels. Unlike traditional methods that rely on standard SDXL resolutions, this calculator operates based on user-specified megapixel inputs. Users can select their desired megapixel count, ranging from 0.1 to 2.0 megapixels, and aspect ratio. The calculator then provides the exact image dimensions necessary for optimal performance with the Flux model. This approach ensures that the generated images meet specific quality and size requirements tailored to the user's needs. Additionally, while the official limit is 2.0 megapixels, during testing, I have successfully generated images at higher resolutions, indicating the model's flexibility in accommodating various image dimensions without compromising quality.
