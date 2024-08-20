@@ -4,7 +4,7 @@ This repository contains custom nodes designed for the ComfyUI framework, focusi
 
 ## Nodes
 
-###List of Nodes:
+### List of Nodes:
 - FLux
   - Flux Resolution Calculator
   - Flux Sampler
