@@ -12,7 +12,7 @@ This repository contains custom nodes designed for the ComfyUI framework, focusi
 - Logic
   - Boolean Basic
   - Boolean Reverse
- - Image
+- Image
   - Get Image Size & Ratio
 
 ### Flux Resolution Calculator
