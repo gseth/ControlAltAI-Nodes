@@ -31,7 +31,7 @@ The Flux Sampler node combines the functionality of the CustomSamplerAdvance nod
 - **Conditioning Input:** Only positive conditioning is supported.
 - **Compatibility:** Only the samplers and schedulers compatible with the Flux model are included.
 
-![ComfyUI Screenshot](https://gseth.com/images/SNAG-3960.png)
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-3957.png)
 
 ### Get Image Size & Ratio
 This node is designed to get the image resolution in width, height, and ratio. The node can be further connected to the Flux Resolution Calculator. To do so, follow the following steps:
