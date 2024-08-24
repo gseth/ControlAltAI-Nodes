@@ -4,7 +4,7 @@ import comfy.sample
 import latent_preview
 
 FLUX_SAMPLER_NAMES = [
-    "euler", "heun", "heunpp2", "dpm_2", "lms", "dpmpp_2m", 
+    "euler", "heun", "heunpp2", "dpm_2", "lms", "dpm_adaptive", "dpmpp_2s_ancestral", "dpmpp_2m", 
     "ipndm", "ipndm_v", "deis", "ddim", "uni_pc", "uni_pc_bh2"
 ]
 
