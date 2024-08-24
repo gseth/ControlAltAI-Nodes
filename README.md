@@ -5,13 +5,15 @@ This repository contains custom nodes designed for the ComfyUI framework, focusi
 ## Nodes
 
 ### List of Nodes:
-- FLux
+- Flux
   - Flux Resolution Calculator
   - Flux Sampler
   - Flux ControlNet (work in progress)
 - Logic
   - Boolean Basic
   - Boolean Reverse
+- Image
+  - Get Image Size & Ratio
 
 ### Flux Resolution Calculator
 
@@ -19,6 +21,7 @@ The Flux Resolution Calculator is designed to determine the optimal image resolu
 
 - **Supported Megapixels:** 0.1 MP, 1.0 MP, 2.0 MP, 2.1 MP, 2.2 MP, 2.3 MP, 2.4MP, 2.5MP
 - **Note:** Generations above 1 MP may appear slightly blurry, but resolutions of 3k+ have been successfully tested on the Flux1.Dev model.
+- **Custom Ratio:** Custom Ratio is now supported. Enable or Disable Custom Ratio and input any ratio. (Example: 4:9)
 
 ### Flux Sampler
 
@@ -28,7 +31,14 @@ The Flux Sampler node combines the functionality of the CustomSamplerAdvance nod
 - **Conditioning Input:** Only positive conditioning is supported.
 - **Compatibility:** Only the samplers and schedulers compatible with the Flux model are included.
 
-![ComfyUI Screenshot](https://gseth.com/images/SNAG-3923.png)
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-3957.png)
+
+### Get Image Size & Ratio
+This node is designed to get the image resolution in width, height, and ratio. The node can be further connected to the Flux Resolution Calculator. To do so, follow the following steps:
+- Right-click on the Flux Resolution Calculator -- > Convert widget to input -- > Convert custom_aspect_ratio to input.
+- Connect Ratio output to custom_aspect_ratio input.
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-3959.png)
 
 ## YouTube ComfyUI Tutorials
 
