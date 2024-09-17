@@ -102,7 +102,7 @@ Without Noise Blend:
 ![ComfyUI Screenshot](https://gseth.com/images/without_noise_blend_3.png)
 
 With Noise Blend:
-![ComfyUI Screenshot](https://gseth.com/images/with_noise_blend_3.png)
+<img src="https://gseth.com/images/with_noise_blend_3.png">
 
 **Example 4**<br>
 Without Noise Blend:
