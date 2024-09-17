@@ -43,6 +43,7 @@ This node is designed to get the image resolution in width, height, and ratio. T
 
 ### Integer Setting
 This node is designed to give output as a raw value of 1 or 2 integers. Enable = 2, Disable = 1.
+
 Use case: This can be set up before a two-way switch, allowing workflow logical control to flow in one or the other direction. As of now, it only controls two logical flows. In the future, we will upgrade the node to support three or more logical switch flows.
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4239.png)
