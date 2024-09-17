@@ -55,8 +55,10 @@ A simple node that can be connected with a boolean logic. A true response will u
 
 ### Noise Plus Blend
 This node will generate a Gaussian blur noise based on the dimensions of the input image and will blend the noise into the entire image or only the mask region.
-Issue: Generated faces/landscapes are realistic, but during upscale, the AI model smoothens the skin or texture, making it look plastic or adding smooth fine lines.
-Solution: For upscaling, auto segment or manually mask the face or specified regions and add noise. Then, pass the blended image output to the K-Sampler and denoise at 0.20 - 0.50.
+
+**Issue:** Generated faces/landscapes are realistic, but during upscale, the AI model smoothens the skin or texture, making it look plastic or adding smooth fine lines.
+
+**Solution:** For upscaling, auto segment or manually mask the face or specified regions and add noise. Then, pass the blended image output to the K-Sampler and denoise at 0.20 - 0.50.
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4241.png)
 
