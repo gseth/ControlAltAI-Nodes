@@ -58,7 +58,11 @@ Issue: Generated faces/landscapes are realistic, but during upscale, the AI mode
 Solution: For upscaling, auto segment or manually mask the face or specified regions and add noise. Then, pass the blended image output to the K-Sampler and denoise at 0.20 - 0.50.
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4241.png)
+
+You can see the noise has been applied only to the face as per the mask. This will maintain the smooth bokeh and preserve the facial details during upscale.
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4242.png)
+
+Denoise the image using Flux or SDXL sampler. Recommended sampler denoise: 0.10 - 0.50
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4243.png)
 
 **Settings:**
