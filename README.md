@@ -54,8 +54,10 @@ A simple node that can be connected with a boolean logic. A true response will u
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4240.png)
 
 ### Noise Plus Blend
-This node will generate a Gaussian blur noise based on the dimensions of the input image and will blend the noise into the entire image or only the mask region.<br>
-**Issue:** Generated faces/landscapes are realistic, but during upscale, the AI model smoothens the skin or texture, making it look plastic or adding smooth fine lines.<br>
+This node will generate a Gaussian blur noise based on the dimensions of the input image and will blend the noise into the entire image or only the mask region.
+
+**Issue:** Generated faces/landscapes are realistic, but during upscale, the AI model smoothens the skin or texture, making it look plastic or adding smooth fine lines.
+
 **Solution:** For upscaling, auto segment or manually mask the face or specified regions and add noise. Then, pass the blended image output to the K-Sampler and denoise at 0.20 - 0.50.
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4241.png)
@@ -66,43 +68,43 @@ You can see the noise has been applied only to the face as per the mask. This wi
 Denoise the image using Flux or SDXL sampler. Recommended sampler denoise: 0.10 - 0.50
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4243.png)
 
-**Settings:**
+**Settings:**<br>
 noise_scale: 0.30 - 0.50.<br>
 blend_opacity: 10-25.
 
 If you find too many artifacts on the skin or other textures, reduce both values. Increase the values if upscaling output results in plastic, velvet-like smooth lines.
 
-**Best Setting for AI-generated Faces:**
+**Best Setting for AI-generated Faces:**<br>
 noise_scale: 0.40-0.50.<br>
 blend_opacity: 15-25.
 
-**Best Setting for AI-generated texture (landscapes):**
+**Best Setting for AI-generated texture (landscapes):**<br>
 noise_scale: 0.30.<br>
 blend_opacity: 12-15.
 
 Results:
-**Example 1**
+**Example 1**<br>
 Without Noise Blend:
 ![ComfyUI Screenshot](https://gseth.com/images/without_noise_blend_1.png)
 
 With Noise Blend:
 ![ComfyUI Screenshot](https://gseth.com/images/with_noise_blend_1.png)
 
-**Example 2**
+**Example 2**<br>
 Without Noise Blend:
 ![ComfyUI Screenshot](https://gseth.com/images/without_noise_blend_2.png)
 
 With Noise Blend:
 ![ComfyUI Screenshot](https://gseth.com/images/with_noise_blend_2.png)
 
-**Example 3**
+**Example 3**<br>
 Without Noise Blend:
 ![ComfyUI Screenshot](https://gseth.com/images/without_noise_blend_3.png)
 
 With Noise Blend:
 ![ComfyUI Screenshot](https://gseth.com/images/with_noise_blend_3.png)
 
-**Example 4**
+**Example 4**<br>
 Without Noise Blend:
 ![ComfyUI Screenshot](https://gseth.com/images/without_noise_blend_4.png)
 
