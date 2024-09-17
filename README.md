@@ -99,7 +99,7 @@ With Noise Blend:
 
 **Example 3**<br>
 Without Noise Blend:
-![ComfyUI Screenshot](https://gseth.com/images/without_noise_blend_3.png)
+![ComfyUI Screenshot](https://gseth.com/images/without_noise_blend_3a.png)
 
 With Noise Blend:
 ![ComfyUI Screenshot](https://gseth.com/images/with_noise_blend_3.png)
