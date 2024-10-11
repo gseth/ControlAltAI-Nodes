@@ -56,7 +56,7 @@ Pose: DWPose Estimator (ControlNet Aux).<br>
 Gray: Image Desaturate (Comfy Essentials Custom Node).<br>
 Low Quality: Direct Input.
 
-Results: Canny and Depth Examples not included. They are straightforward.<br>
+Results: (Canny and Depth Examples not included. They are straightforward.)<br><br>
 **Pixel Low Resolution to High Resolution**<br><br>
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4386.png)
 
