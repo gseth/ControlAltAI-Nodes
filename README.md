@@ -94,7 +94,7 @@ Results: (Canny and Depth Examples not included. They are straightforward.)<br><
 
 **YouTube tutorial Union ControlNet Usage: Coming Soon**
 
-**Shakker Labs & InstantX Flux ControlNet Union Pro Model Download: **<a href="https://huggingface.co/Shakker-Labs/FLUX.1-dev-ControlNet-Union-Pro">Hugging Face Link</a>
+**Shakker Labs & InstantX Flux ControlNet Union Pro Model Download:** <a href="https://huggingface.co/Shakker-Labs/FLUX.1-dev-ControlNet-Union-Pro">Hugging Face Link</a>
 
 ### Get Image Size & Ratio
 This node is designed to get the image resolution in width, height, and ratio. The node can be further connected to the Flux Resolution Calculator. To do so, follow the following steps:
