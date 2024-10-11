@@ -39,7 +39,9 @@ The Flux Sampler node combines the functionality of the CustomSamplerAdvance nod
 
 ### Flux Union ControlNet Apply
 
-The Flux Union ControlNet Apply node is an all-in-one node compatible with InstanX Union Pro ControlNet. It has been tested extensively with the union controlnet type and works as intended.
+The Flux Union ControlNet Apply node is an all-in-one node compatible with InstanX Union Pro ControlNet. It has been tested extensively with the union controlnet type and works as intended. You can combine two ControlNet Union units and get good results. Not recommended to combine more than two. The ControlNet is tested only on the Flux 1.Dev Model.
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4402.png)
 
 **Recommended Settings:**<br>
 strength: 0.15-0.65.<br>
@@ -54,22 +56,22 @@ Pose: DWPose Estimator (ControlNet Aux).<br>
 Gray: Image Desaturate (Comfy Essentials Custom Node).<br>
 Low Quality: Direct Input.
 
-Results: Canny and Depth Examples not included. They are straightforward.
-**Pixel Low Resolution to High Resolution**<br>
+Results: Canny and Depth Examples not included. They are straightforward.<br>
+**Pixel Low Resolution to High Resolution**<br><br>
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4386.png)
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4343.png)
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4387.png)
 
-**Photo Restoration**<br>
+**Photo Restoration**<br><br>
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4375.png)
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4376.png)
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4381.png)
 
-**Game Asset Low Resolution Upscale**<br>
+**Game Asset Low Resolution Upscale**<br><br>
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4389.png)
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4340.png)
@@ -78,10 +80,10 @@ Results: Canny and Depth Examples not included. They are straightforward.
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4342.png)
 
-**Blur to UnBlur**<br>
+**Blur to UnBlur**<br><br>
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4364.png)
 
-**Re-Color**<br>
+**Re-Color**<br><br>
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4390.png)
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4392.png)
@@ -91,6 +93,8 @@ Results: Canny and Depth Examples not included. They are straightforward.
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4395.png)
 
 **YouTube tutorial Union ControlNet Usage: Coming Soon**
+
+**Shakker Labs & InstantX Flux ControlNet Union Pro Model Download: **<a href="https://huggingface.co/Shakker-Labs/FLUX.1-dev-ControlNet-Union-Pro">Hugging Face Link</a>
 
 ### Get Image Size & Ratio
 This node is designed to get the image resolution in width, height, and ratio. The node can be further connected to the Flux Resolution Calculator. To do so, follow the following steps:
