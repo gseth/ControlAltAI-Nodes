@@ -92,7 +92,7 @@ Results: (Canny and Depth Examples not included. They are straightforward.)<br><
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4395.png)
 
-**YouTube tutorial Union ControlNet Usage: Coming Soon**
+**YouTube tutorial Union ControlNet Usagel: <a href="https://youtube.com/watch?v=4_1A5pQkJkg">Video Tutoria</a>**
 
 **Shakker Labs & InstantX Flux ControlNet Union Pro Model Download:** <a href="https://huggingface.co/Shakker-Labs/FLUX.1-dev-ControlNet-Union-Pro">Hugging Face Link</a>
 
