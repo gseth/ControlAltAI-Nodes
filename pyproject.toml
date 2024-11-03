@@ -1,7 +1,7 @@
 [project]
 name = "comfyui_controlaltai_nodes"
-description = "Quality fo Life Nodes from ControlAltAI. Flux Resolution Calculator, FLux Sampler, Boolean Logic."
-version = "1.0.3"
+description = "Quality fo Life Nodes from ControlAltAI. Flux Resolution Calculator, Flux Sampler, Flux Union ControlNet Apply, Noise Plus Blend, Boolean Logic Nodes."
+version = "1.1.0"
 license = {file = "LICENSE"}
 
 [project.urls]
@@ -10,5 +10,5 @@ Repository = "https://github.com/gseth/ControlAltAI-Nodes"
 
 [tool.comfy]
 PublisherId = "controlaltai"
-DisplayName = "ComfyUI_ControlAltAI_Nodes"
+DisplayName = "ControlAltAI_Nodes"
 Icon = ""
