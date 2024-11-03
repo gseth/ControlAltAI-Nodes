@@ -8,12 +8,15 @@ This repository contains custom nodes designed for the ComfyUI framework, focusi
 - Flux
   - Flux Resolution Calculator
   - Flux Sampler
-  - Flux ControlNet (work in progress)
+  - Flux Union ControlNet Apply
 - Logic
   - Boolean Basic
   - Boolean Reverse
+  - Integer Settings
+  - Choose Upscale Model
 - Image
   - Get Image Size & Ratio
+  - Noise Plus Blend
 
 ### Flux Resolution Calculator
 
@@ -33,6 +36,65 @@ The Flux Sampler node combines the functionality of the CustomSamplerAdvance nod
 - **Latent Compatibility:** Use SD3 Empty Latent Image only. The normal empty latent image node is not compatible.
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-3957.png)
+
+### Flux Union ControlNet Apply
+
+The Flux Union ControlNet Apply node is an all-in-one node compatible with InstanX Union Pro ControlNet. It has been tested extensively with the union controlnet type and works as intended. You can combine two ControlNet Union units and get good results. Not recommended to combine more than two. The ControlNet is tested only on the Flux 1.Dev Model.
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4402.png)
+
+**Recommended Settings:**<br>
+strength: 0.15-0.65.<br>
+end percentage: 0.200 - 0.900.
+
+**Recommended PreProcessors:**<br>
+Canny: Canny Edge (ControlNet Aux).<br>
+Tile: Tile (ControlNet Aux).<br>
+Depth: Depth Anything V2 Relative (ControlNet Aux).<br>
+Blue: Direct Input (Blurry Image) or Tile (ControlNet Aux).<br>
+Pose: DWPose Estimator (ControlNet Aux).<br>
+Gray: Image Desaturate (Comfy Essentials Custom Node).<br>
+Low Quality: Direct Input.
+
+Results: (Canny and Depth Examples not included. They are straightforward.)<br><br>
+**Pixel Low Resolution to High Resolution**<br><br>
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4386.png)
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4343.png)
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4387.png)
+
+**Photo Restoration**<br><br>
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4375.png)
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4376.png)
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4381.png)
+
+**Game Asset Low Resolution Upscale**<br><br>
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4389.png)
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4340.png)
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4341.png)
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4342.png)
+
+**Blur to UnBlur**<br><br>
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4364.png)
+
+**Re-Color**<br><br>
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4390.png)
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4392.png)
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4394.png)
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4395.png)
+
+**YouTube tutorial Union ControlNet Usage: Coming Soon**
+
+**Shakker Labs & InstantX Flux ControlNet Union Pro Model Download:** <a href="https://huggingface.co/Shakker-Labs/FLUX.1-dev-ControlNet-Union-Pro">Hugging Face Link</a>
 
 ### Get Image Size & Ratio
 This node is designed to get the image resolution in width, height, and ratio. The node can be further connected to the Flux Resolution Calculator. To do so, follow the following steps:
@@ -111,23 +173,17 @@ Without Noise Blend:
 With Noise Blend:
 ![ComfyUI Screenshot](https://gseth.com/images/with_noise_blend_4.png)
 
-## YouTube ComfyUI Tutorials
+### YouTube ComfyUI Tutorials
 
 We are a team of two and create extensive tutorials for ComfyUI. Check out our YouTube channel:</br>
 <a href="https://youtube.com/@controlaltai">ControlAltAI YouTube Tutorials</a>
 
-## Black Forest Labs AI
+### Black Forest Labs AI
 
 Black Forest Labs, a pioneering AI research organization, has developed the Flux model series, which includes the Flux1.[dev] and Flux1.[schnell] models. These models are designed to push the boundaries of image generation through advanced deep-learning techniques.
 
 For more details on these models, their capabilities, and licensing information, you can visit the <a href="https://blackforestlabs.ai/">Black Forest Labs website</a>
 
-
-## Apply ControlNet Node
-
-Work in Progress
-
-
-## License
+### License
 
 This project is licensed under the MIT License.
