@@ -17,6 +17,14 @@ This repository contains custom nodes designed for the ComfyUI framework, focusi
 - Image
   - Get Image Size & Ratio
   - Noise Plus Blend
+- Flux Region
+  - Region Mask Generator
+  - Region Mask Processor
+  - Region Mask Validator
+  - Region Mask Conditioning
+  - Flux Attention Control
+  - Region Overlay Visualizer
+  - Flux Attention Cleanup
 
 ### Flux Resolution Calculator
 
@@ -175,6 +183,86 @@ Without Noise Blend:
 
 With Noise Blend:
 ![ComfyUI Screenshot](https://gseth.com/images/with_noise_blend_4.png)
+
+### Flux Region (Spatial Control)
+
+The node pipeline is as follows: Region Mask Generator --> Region Mask Processor --> Region Mask Validator --> Flux Region Conditioning --> Flux Attention Control --> Flux Overlay Visualizer (optional) --> Flux Attention Cleanup. </br>
+*Note: Watching the video tutorial is a must. The learning curve is a bit high to use Flux Region Spatial Control*
+
+**Region Mask Generator:** This node generates the regions in mask and bbox format. This information is then passed on to the Mask Processor.</br>
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4945.png)</br>
+
+**Region Mask Processor:** This node generates, processes the mask, and applies Gaussian Blue and feathering. This pre-processor node preprocesses the mask and sends the preprocessed information in the pipeline.</br>
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4947.png)</br>
+
+**Region Mask Validator:** This node calculates the validity of the regions. The "is valid" message will be true if there are no overlaps. The validation message would show you detailed information on the overlapping regions and the overlap percentage. Although the methodology used requires zero overlaps, the issue is resolved in the flux attention control with feathering. Overlapping will only be an issue if it is excessive.</br>
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4946.png)</br>
+
+**Region Mask Conditioning:** Up to three separate conditioning can be connected. The node will process based on the number of regions defined rather than the actual conditioning connections. The strength values are independent for each region. Strength 1 for Region 1, Strength 2 for Region 2, and Strength 3 for Region 3. The strength value range is from 0 to 10 with an increment/decrement step of 0.1. At Value 1, the region strength will match the base conditioning strength, which is always set at 1 as a global value. Strength Values are not only relative to the base conditioning values but are also relative to each other. They are also affected by the Region % area in the canvas and the feathering value in the attention control. Please note. Only use the dual clip and flux conditioning in comfy. The base + region flux guidance should be set to 1.</br>
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4950.png)</br>
+
+**Flux Attention Control:** The node takes the region conditioning + base conditioning + the feathering strengths and all the previous information in the pipeline and overrides the Flux Attention. When disabled, it only passes through the base conditioning to the Sampler.</br>
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4951.png)</br>
+
+**Region Overlay Visualizer:** This node overlays the region on the final output for visual purposes only.</br>
+
+**Flux Attention Cleanup:** Since the attention is overridden in the model, a tensor mismatch error will occur when you switch the workflow. We also do not want the attention to be cleaned up in the existing workflow. This node automatically will preserve attention during re-runs in the existing workflow, but when switching workflow will do a fresh clean up and restore flux original attention. This process is achieved without a model unload or manual cache cleanup, as they will not work.</br>
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4952.png)</br>
+
+**Xformers & Token Limits:** The pipeline here needs VRAM to be stored in the same GPU while Flux, LoRA, and Dual Clip are loaded. Due to this, XFormers is required to optimize VRAM Usage. The total tensor size is approximately 5000x5000 for a 24GB VRAM GPU. This limit is set on purpose for consumer-grade hardware and will be increased with the release of a 5090 GPU. Due to this tensor size limitation, token size is also limited when using Dual Clip. Single Clip is not recommended. Use only Dual Clip. When Base Plus all 3 Regions are connected, a max token for each clip l and t5xxl should be 80 or less. 160 Tokens when combined. In other words, you can use (160 x 4 = 640) tokens in total before running into a tensor size error. Reduce prompt tokens when you get a tensor size error. This system was implemented to avoid any OOM errors (out-of-memory errors) on a 24GB VRAM GPU. All testing has been done on Flux 1.dev model with FP8 and t5xxl with FP 16 without any OOM on a 4090.
+
+**GGUF & CivitAI fine-tune models:** The Flux Region Pipeline was tested with GGUF models without issues. Third-party CivitAI Copax Timeless XPlus 3 Flux models also worked without problems. 
+
+**LoRA Support:** LoRA is supported and will apply to all attention. At this stage, using different LoRA for different Regions is not possible. Research work is still ongoing.
+
+Results:
+**Example 1**<br>
+3 Region Split Blend using Advance LLM: Base Conditioning (ignored) + 3 Regions
+![ComfyUI Screenshot](https://gseth.com/images/region_control_11.png)
+![ComfyUI Screenshot](https://gseth.com/images/region_control_12.png)
+
+**Example 2**<br>
+Style manipulation: Base Conditioning + 1 Region
+![ComfyUI Screenshot](https://gseth.com/images/region_control_1.png)
+![ComfyUI Screenshot](https://gseth.com/images/region_control_2.png)
+
+**Example 3**<br>
+Simple Splitting Contrast: Base Conditioning (ignored) + 2 Regions
+![ComfyUI Screenshot](https://gseth.com/images/region_control_3.png)
+![ComfyUI Screenshot](https://gseth.com/images/region_control_4.png)
+
+**Example 4**<br>
+Simple Splitting Blend: Base Conditioning + 1 Region
+![ComfyUI Screenshot](https://gseth.com/images/region_control_5.png)
+![ComfyUI Screenshot](https://gseth.com/images/region_control_6.png)
+
+**Example 5**<br>
+3 Region Split Blend: Base Conditioning (ignored) + 3 Regions
+![ComfyUI Screenshot](https://gseth.com/images/region_control_7.png)
+![ComfyUI Screenshot](https://gseth.com/images/region_control_8.png)
+
+**Example 6**<br>
+3 Region Split Contrast: Base Conditioning (ignored) + 3 Regions
+![ComfyUI Screenshot](https://gseth.com/images/region_control_9.png)
+![ComfyUI Screenshot](https://gseth.com/images/region_control_10.png)
+
+**Example 7**<br>
+3 Region Split Blend using Advance LLM: Base Conditioning (ignored) + 3 Regions
+![ComfyUI Screenshot](https://gseth.com/images/region_control_13.png)
+![ComfyUI Screenshot](https://gseth.com/images/region_control_14.png)
+
+**Example 8**<br>
+Color Manipulation: Base Conditioning (ignored) + 3 Regions
+![ComfyUI Screenshot](https://gseth.com/images/region_control_15.png)
+![ComfyUI Screenshot](https://gseth.com/images/region_control_16.png)
+
+**YouTube tutorial Flux Region Usage: <a href="">Coming Soon</a>**
 
 ### YouTube ComfyUI Tutorials
 
