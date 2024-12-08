@@ -1,4 +1,4 @@
-### Requirements Update: 8 Dec 2024: XFormers is now needed. Check your version of PyTorch and install a compatible version of XFormers. Please follow the instructions here: https://github.com/gseth/ControlAltAI-Nodes/issues/9#issuecomment-2525463302
+### Requirements Update: 8 Dec 2024: Flux Attention Control Node requires XFormers. Check your version of PyTorch and install a compatible version of XFormers. Please follow the instructions here: [https://github.com/gseth/ControlAltAI-Nodes/issues/9#issuecomment-2525463302](https://github.com/gseth/ControlAltAI-Nodes/blob/master/xformers_instructions.txt)
 
 # ComfyUI ControlAltAI Nodes
 
