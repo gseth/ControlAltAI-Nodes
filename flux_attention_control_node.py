@@ -7,8 +7,9 @@ import comfy.model_management as model_management
 from comfy.ldm.modules import attention as comfy_attention
 from comfy.ldm.flux import math as flux_math
 from comfy.ldm.flux import layers as flux_layers
+from xformers.ops import memory_efficient_attention as xattention
 import numpy as np
-from PIL import Image, ImageFilter, ImageDraw
+from PIL import Image
 from functools import partial
 
 class FluxAttentionControl:
@@ -17,7 +18,10 @@ class FluxAttentionControl:
         from xformers.ops import memory_efficient_attention as xattention
         has_xformers = True
     except ImportError:
-        pass
+        print("\n" + "="*70)
+        print("\033[94mControlAltAI-Nodes: This node requires xformers to function.\033[0m")
+        print("\033[33mPlease check \"xformers_instructions.txt\" in ComfyUI\\custom_nodes\\ControlAltAI-Nodes for how to install XFormers\033[0m")
+        print("="*70 + "\n")
 
     def __init__(self):
         self.original_attention = comfy_attention.optimized_attention
@@ -36,7 +40,7 @@ class FluxAttentionControl:
                 "number_of_regions": ("INT", {
                     "default": 1,
                     "min": 1,
-                    "max": 3,
+                    "max": 4,
                     "step": 1,
                     "display": "Number of Regions"
                 }),
@@ -44,61 +48,32 @@ class FluxAttentionControl:
                     "default": True,
                     "display": "Enable Regional Control"
                 }),
-                "feather_radius1": ("FLOAT", {
-                    "default": 0.0,
-                    "min": 0.0,
-                    "max": 100.0,
-                    "step": 1.0,
-                    "display": "Feather Radius for Region 1"
-                }),
             },
             "optional": {
                 "region2": ("REGION",),
-                "feather_radius2": ("FLOAT", {
-                    "default": 0.0,
-                    "min": 0.0,
-                    "max": 100.0,
-                    "step": 1.0,
-                    "display": "Feather Radius for Region 2"
-                }),
                 "region3": ("REGION",),
-                "feather_radius3": ("FLOAT", {
-                    "default": 0.0,
-                    "min": 0.0,
-                    "max": 100.0,
-                    "step": 1.0,
-                    "display": "Feather Radius for Region 3"
-                }),
+                "region4": ("REGION",),
             }
         }
 
     RETURN_TYPES = ("MODEL", "CONDITIONING",)
     RETURN_NAMES = ("model", "conditioning",)
     FUNCTION = "apply_attention_control"
-    CATEGORY = "ControlAltAI Nodes/Flux Region"
+    CATEGORY = "conditioning/flux"
 
-    def generate_region_mask(self, region: Dict, width: int, height: int, feather_radius: float) -> Image.Image:
+    def generate_region_mask(self, region: Dict, width: int, height: int) -> Image.Image:
         if region.get('bbox') is not None:
             x1, y1, x2, y2 = region['bbox']
-            x1_px = int(x1 * width)
-            y1_px = int(y1 * height)
-            x2_px = int(x2 * width)
-            y2_px = int(y2 * height)
             mask = Image.new('L', (width, height), 0)
-            mask_draw = ImageDraw.Draw(mask)
-            mask_draw.rectangle([x1_px, y1_px, x2_px, y2_px], fill=255)
-            if feather_radius > 0:
-                mask = mask.filter(ImageFilter.GaussianBlur(radius=feather_radius))
-            print(f'Generating masks with {width}x{height} and [{x1}, {y1}, {x2}, {y2}], feather_radius={feather_radius}')
-            return mask
+            mask_arr = np.array(mask)
+            mask_arr[int(y1*height):int(y2*height), int(x1*width):int(x2*width)] = 255
+            print(f'Generating masks with {width}x{height} and [{x1}, {y1}, {x2}, {y2}]')
+            return Image.fromarray(mask_arr)
         elif region.get('mask') is not None:
             mask = region['mask'][0].cpu().numpy()
             mask = (mask * 255).astype(np.uint8)
             mask = Image.fromarray(mask)
-            mask = mask.resize((width, height))
-            if feather_radius > 0:
-                mask = mask.filter(ImageFilter.GaussianBlur(radius=feather_radius))
-            return mask
+            return mask.resize((width, height))
         else:
             raise Exception('Unknown region type')
 
@@ -109,19 +84,20 @@ class FluxAttentionControl:
         lin_masks = []
         for mask in masks:
             mask = mask.convert('L')
-            mask = torch.tensor(np.array(mask)).unsqueeze(0).unsqueeze(0) / 255.0  # Normalize to 0-1
-            mask = F.interpolate(mask, (hH, hW), mode='bilinear', align_corners=False).flatten()
+            mask = torch.tensor(np.array(mask)).unsqueeze(0).unsqueeze(0) / 255
+            mask = F.interpolate(mask, (hH, hW), mode='nearest-exact').flatten()
             lin_masks.append(mask)
         return lin_masks, hH, hW
 
-    def prepare_attention_mask(self, lin_masks: List[torch.Tensor], region_strengths: List[float], Nx: int, emb_size: int, emb_len: int):
+    def prepare_attention_mask(self, lin_masks: List[torch.Tensor], reg_embeds: List[torch.Tensor],
+                               Nx: int, emb_size: int, emb_len: int):
+        """Prepare attention mask for specific numbers of regions (1, 2, or 3)"""
         total_len = emb_len + Nx
-        n_regs = len(lin_masks)
-        
-        # Initialize attention mask and scales
         cross_mask = torch.zeros(total_len, total_len)
         q_scale = torch.ones(total_len)
         k_scale = torch.ones(total_len)
+        
+        n_regs = len(lin_masks)
         
         # Indices for embeddings
         main_prompt_start = 0
@@ -131,45 +107,108 @@ class FluxAttentionControl:
         subprompt_starts = [emb_size * (i + 1) for i in range(n_regs)]
         subprompt_ends = [emb_size * (i + 2) for i in range(n_regs)]
         
-        # Initialize position masks
-        position_masks = torch.stack(lin_masks)
-
-        # Normalize masks so that overlapping areas sum to 1
-        position_masks_sum = position_masks.sum(dim=0)
-        position_masks_normalized = position_masks / (position_masks_sum + 1e-8)
-
-        # Build attention masks and scales
-        for i in range(n_regs):
-            sp_start = subprompt_starts[i]
-            sp_end = subprompt_ends[i]
-            mask_i = position_masks_normalized[i]
-
-            # Scale embeddings based on mask and per-region strength
-            strength = region_strengths[i]
-            q_scale[sp_start:sp_end] = mask_i.mean() * strength
-            k_scale[sp_start:sp_end] = mask_i.mean() * strength
-
+        # Handle different cases based on the number of regions
+        if n_regs == 1:
+            # For one region
+            sp_start = subprompt_starts[0]
+            sp_end = subprompt_ends[0]
+            
+            # Block attention between main prompt and subprompt
+            cross_mask[sp_start:sp_end, main_prompt_start:main_prompt_end] = 1
+            cross_mask[main_prompt_start:main_prompt_end, sp_start:sp_end] = 1
+            
+            # Scale based on region size
+            scale = lin_masks[0].sum() / Nx
+            if scale > 1e-5:
+                q_scale[sp_start:sp_end] = 1 / scale
+                k_scale[sp_start:sp_end] = 1 / scale
+            
             # Create mask including tokens and positions
-            m_with_tokens = torch.cat([torch.ones(emb_len), mask_i])
-            mb = m_with_tokens > 0.0
-
+            m_with_tokens = torch.cat([torch.ones(emb_len), lin_masks[0]])
+            mb = m_with_tokens > 0.5
+            
             # Block attention between positions not in mask and subprompt
             cross_mask[~mb, sp_start:sp_end] = 1
             cross_mask[sp_start:sp_end, ~mb] = 1
 
-            # Block attention between positions in region and main prompt
-            positions_idx = (mask_i > 0.0).nonzero(as_tuple=True)[0] + emb_len
-            cross_mask[positions_idx[:, None], main_prompt_start:main_prompt_end] = 1
-            cross_mask[main_prompt_start:main_prompt_end, positions_idx[None, :]] = 1
+        elif n_regs == 2:
+            # For two regions
+            for i in range(2):
+                sp_start = subprompt_starts[i]
+                sp_end = subprompt_ends[i]
+                
+                # Block attention between main prompt and subprompts
+                cross_mask[sp_start:sp_end, main_prompt_start:main_prompt_end] = 1
+                cross_mask[main_prompt_start:main_prompt_end, sp_start:sp_end] = 1
+                
+                # Block attention between subprompts
+                other_sp_start = subprompt_starts[1 - i]
+                other_sp_end = subprompt_ends[1 - i]
+                cross_mask[sp_start:sp_end, other_sp_start:other_sp_end] = 1
+                cross_mask[other_sp_start:other_sp_end, sp_start:sp_end] = 1
+                
+                # Scale based on region size
+                scale = lin_masks[i].sum() / Nx
+                if scale > 1e-5:
+                    q_scale[sp_start:sp_end] = 1 / scale
+                    k_scale[sp_start:sp_end] = 1 / scale
+                
+                # Create mask including tokens and positions
+                m_with_tokens = torch.cat([torch.ones(emb_len), lin_masks[i]])
+                mb = m_with_tokens > 0.5
+                
+                # Block attention between positions not in mask and subprompt
+                cross_mask[~mb, sp_start:sp_end] = 1
+                cross_mask[sp_start:sp_end, ~mb] = 1
+            
+            # Handle intersection between regions
+            intersect_idx = torch.logical_and(lin_masks[0] > 0.5, lin_masks[1] > 0.5)
+            if intersect_idx.any():
+                idx = intersect_idx.nonzero(as_tuple=True)[0] + emb_len
+                cross_mask[idx[:, None], idx[None, :]] = 1
 
-            # Block attention between subprompts
-            for j in range(n_regs):
-                if i != j:
-                    other_sp_start = subprompt_starts[j]
-                    other_sp_end = subprompt_ends[j]
-                    cross_mask[sp_start:sp_end, other_sp_start:other_sp_end] = 1
-                    cross_mask[other_sp_start:other_sp_end, sp_start:sp_end] = 1
-
+        elif n_regs == 3:
+            # For three regions
+            for i in range(3):
+                sp_start = subprompt_starts[i]
+                sp_end = subprompt_ends[i]
+                
+                # Block attention between main prompt and subprompts
+                cross_mask[sp_start:sp_end, main_prompt_start:main_prompt_end] = 1
+                cross_mask[main_prompt_start:main_prompt_end, sp_start:sp_end] = 1
+                
+                # Block attention between subprompts
+                for j in range(3):
+                    if i != j:
+                        other_sp_start = subprompt_starts[j]
+                        other_sp_end = subprompt_ends[j]
+                        cross_mask[sp_start:sp_end, other_sp_start:other_sp_end] = 1
+                        cross_mask[other_sp_start:other_sp_end, sp_start:sp_end] = 1
+                
+                # Scale based on region size
+                scale = lin_masks[i].sum() / Nx
+                if scale > 1e-5:
+                    q_scale[sp_start:sp_end] = 1 / scale
+                    k_scale[sp_start:sp_end] = 1 / scale
+                
+                # Create mask including tokens and positions
+                m_with_tokens = torch.cat([torch.ones(emb_len), lin_masks[i]])
+                mb = m_with_tokens > 0.5
+                
+                # Block attention between positions not in mask and subprompt
+                cross_mask[~mb, sp_start:sp_end] = 1
+                cross_mask[sp_start:sp_end, ~mb] = 1
+            
+            # Handle intersections between regions
+            for i in range(3):
+                for j in range(i + 1, 3):
+                    intersect_idx = torch.logical_and(lin_masks[i] > 0.5, lin_masks[j] > 0.5)
+                    if intersect_idx.any():
+                        idx = intersect_idx.nonzero(as_tuple=True)[0] + emb_len
+                        cross_mask[idx[:, None], idx[None, :]] = 1
+        else:
+            raise ValueError("Number of regions must be 1, 2, or 3.")
+        
         # Ensure self-attention is allowed
         cross_mask.fill_diagonal_(0)
         
@@ -179,47 +218,30 @@ class FluxAttentionControl:
         
         return cross_mask, q_scale, k_scale
 
+
     def xformers_attention(self, q: Tensor, k: Tensor, v: Tensor, pe: Tensor,
-                          attn_mask: Optional[Tensor] = None) -> Tensor:
-        if not self.has_xformers:
-            print("\n" + "="*70)
-            print("\033[94mControlAltAI-Nodes: This node requires xformers to function.\033[0m")
-            print("\033[33mPlease check \"xformers_instructions.txt\" in ComfyUI\\custom_nodes\\ControlAltAI-Nodes for how to install XFormers\033[0m")
-            print("="*70 + "\n")
-            raise ImportError("xformers is required for this node")
-            
+                           attn_mask: Optional[Tensor] = None) -> Tensor:
         q, k = flux_math.apply_rope(q, k, pe)
         q = rearrange(q, "B H L D -> B L H D")
         k = rearrange(k, "B H L D -> B L H D")
         v = rearrange(v, "B H L D -> B L H D")
         if attn_mask is not None:
-            x = self.xattention(q, k, v, attn_bias=attn_mask)
+            x = xattention(q, k, v, attn_bias=attn_mask)
         else:
-            x = self.xattention(q, k, v)
+            x = xattention(q, k, v)
         x = rearrange(x, "B L H D -> B L (H D)")
         return x
 
     def apply_attention_control(self,
-                              model: object,
-                              condition: List,
-                              latent_dimensions: Dict,
-                              region1: Dict,
-                              number_of_regions: int,
-                              enabled: bool,
-                              feather_radius1: float = 0.0,
-                              region2: Optional[Dict] = None,
-                              feather_radius2: Optional[float] = 0.0,
-                              region3: Optional[Dict] = None,
-                              feather_radius3: Optional[float] = 0.0):
-        
-        # Extract dimensions and embeddings
-        latent = latent_dimensions["samples"]
-        bs_l, n_ch, lH, lW = latent.shape
-        text_emb = condition[0][0].clone()
-        clip_emb = condition[0][1]['pooled_output'].clone()
-        bs, emb_size, emb_dim = text_emb.shape
-        iH, iW = lH * 8, lW * 8
-
+                                model: object,
+                                condition: List,
+                                latent_dimensions: Dict,
+                                region1: Dict,
+                                number_of_regions: int,
+                                enabled: bool,
+                                region2: Optional[Dict] = None,
+                                region3: Optional[Dict] = None,
+                                region4: Optional[Dict] = None):
         if not enabled:
             # Restore original attention functions
             flux_math.attention = self.original_flux_attention
@@ -229,28 +251,30 @@ class FluxAttentionControl:
 
         print(f'Region attention Node enabled: {enabled}, regions: {number_of_regions}')
 
+        # Extract dimensions and embeddings
+        latent = latent_dimensions["samples"]
+        bs_l, n_ch, lH, lW = latent.shape
+        text_emb = condition[0][0].clone()
+        clip_emb = condition[0][1]['pooled_output'].clone()
+        bs, emb_size, emb_dim = text_emb.shape
+        iH, iW = lH * 8, lW * 8
+
         # Process active regions
         subprompts_embeds = []
         masks = []
-        region_strengths = []
         
-        # Collect regions and feather radii
-        regions = [region1, region2, region3]
-        feather_radii = [feather_radius1, feather_radius2, feather_radius3]
-
+        # Collect regions
+        regions = [region1, region2, region3, region4]
         for idx, region in enumerate(regions[:number_of_regions]):
             if region is not None and region.get('conditioning') is not None:
-                strength = region.get('strength', 1.0)
-                region_strengths.append(strength)
-                subprompt_emb = region['conditioning'][0][0]
-                subprompts_embeds.append(subprompt_emb)
-                feather_radius = feather_radii[idx] if feather_radii[idx] is not None else 0.0
-                masks.append(self.generate_region_mask(region, iW, iH, feather_radius))
+                subprompts_embeds.append(region['conditioning'][0][0])
+                masks.append(self.generate_region_mask(region, iW, iH))
             else:
                 print(f"Region {idx+1} is None or has no conditioning")
-
+        
         if not subprompts_embeds:
             print("No active regions with conditioning found.")
+            # Restore original attention functions
             flux_math.attention = self.original_flux_attention
             flux_layers.attention = self.original_flux_layers_attention
             return (model, condition)
@@ -264,23 +288,27 @@ class FluxAttentionControl:
         
         # Create attention mask
         attn_mask, q_scale, k_scale = self.prepare_attention_mask(
-            lin_masks, region_strengths, Nx, emb_size, emb_len)
+            lin_masks, subprompts_embeds, Nx, emb_size, emb_len)
 
         # Format for xFormers
         device = torch.device('cuda')
         attn_dtype = torch.bfloat16 if model_management.should_use_bf16(device=device) else torch.float16
         
         if attn_mask is not None:
-            print(f'Applying attention masks: torch.Size([{attn_mask.shape[0]}, {attn_mask.shape[1]}])')
+            print(f'Applying attention masks: {attn_mask.shape}')
             L = attn_mask.shape[0]
             H = 24  # Number of heads in FLUX model
-            pad = (8 - L % 8) % 8
+            pad = (8 - L % 8) % 8  # Ensure pad is between 0 and 7
             pad_L = L + pad
             mask_out = torch.zeros([bs, H, pad_L, pad_L], dtype=attn_dtype, device=device)
             mask_out[:, :, :L, :L] = attn_mask.to(device, dtype=attn_dtype)
-            attn_mask = mask_out
+            attn_mask = mask_out[:, :, :pad_L, :pad_L]
 
-        # Override attention functions
+        # Prepare final mask
+        attn_mask_bool = attn_mask > 0.5
+        attn_mask.masked_fill_(attn_mask_bool, float('-inf'))
+        
+        # Override attention
         attn_mask_arg = attn_mask if enabled else None
         override_attention = partial(self.xformers_attention, attn_mask=attn_mask_arg)
         flux_math.attention = override_attention
