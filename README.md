@@ -24,7 +24,8 @@ The Flux Resolution Calculator is designed to determine the optimal image resolu
 
 - **Supported Megapixels:** 0.1 MP, 1.0 MP, 2.0 MP, 2.1 MP, 2.2 MP, 2.3 MP, 2.4MP, 2.5MP
 - **Note:** Generations above 1 MP may appear slightly blurry, but resolutions of 3k+ have been successfully tested on the Flux1.Dev model.
-- **Custom Ratio:** Custom Ratio is now supported. Enable or Disable Custom Ratio and input any ratio. (Example: 4:9)
+- **Custom Ratio:** Custom Ratio is now supported. Enable or Disable Custom Ratio and input any ratio. (Example: 4:9).
+- **Preview:** The preview node is just a visual representation of the ratio.
 
 ### Flux Sampler
 
@@ -35,7 +36,9 @@ The Flux Sampler node combines the functionality of the CustomSamplerAdvance nod
 - **Compatibility:** Only the samplers and schedulers compatible with the Flux model are included.
 - **Latent Compatibility:** Use SD3 Empty Latent Image only. The normal empty latent image node is not compatible.
 
-![ComfyUI Screenshot](https://gseth.com/images/SNAG-3957.png)
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4942.png)
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4941.png)
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4943.png)
 
 ### Flux Union ControlNet Apply
 
