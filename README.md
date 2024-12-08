@@ -187,7 +187,7 @@ With Noise Blend:
 ### Flux Region (Spatial Control)
 
 The node pipeline is as follows: Region Mask Generator --> Region Mask Processor --> Region Mask Validator --> Flux Region Conditioning --> Flux Attention Control --> Flux Overlay Visualizer (optional) --> Flux Attention Cleanup. </br>
-*Note: Watching the video tutorial is a must. The learning curve is a bit high to use Flux Region Spatial Control*
+*Note: Watching the video tutorial is a must. The learning curve is a bit high to use Flux Region Spatial Control.*
 
 **Region Mask Generator:** This node generates the regions in mask and bbox format. This information is then passed on to the Mask Processor.</br>
 
