@@ -1,4 +1,4 @@
-#Requirements Update: 8 Dec 2024: XFormers is now needed. You can install Xformers without breaking dependencies. PLease follow instructions here: https://github.com/gseth/ControlAltAI-Nodes/issues/9#issuecomment-2525463302
+#Requirements Update: 8 Dec 2024: XFormers is now needed. You can install Xformers without breaking dependencies. Please follow instructions here: https://github.com/gseth/ControlAltAI-Nodes/issues/9#issuecomment-2525463302
 
 # ComfyUI ControlAltAI Nodes
 
