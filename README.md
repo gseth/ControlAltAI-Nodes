@@ -221,6 +221,8 @@ The node pipeline is as follows: Region Mask Generator --> Region Mask Processor
 
 **LoRA Support:** LoRA is supported and will apply to all attention. At this stage, using different LoRA for different Regions is not possible. Research work is still ongoing.
 
+**ControlNet Support:** Currently not tested. Research work is still ongoing.
+
 Results:
 **Example 1**<br>
 3 Region Split Blend using Advance LLM: Base Conditioning (ignored) + 3 Regions
