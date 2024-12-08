@@ -87,7 +87,7 @@ Results: (Canny and Depth Examples not included. They are straightforward.)<br><
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4340.png)
 
-![ComfyUI Screenshot](https://gseth.com/images/SNAG-4341.png)
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4341a.png)
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4342.png)
 
