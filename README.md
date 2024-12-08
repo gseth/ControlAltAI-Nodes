@@ -197,7 +197,7 @@ The node pipeline is as follows: Region Mask Generator --> Region Mask Processor
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4947.png)</br>
 
-**Region Mask Validator:** This node calculates the validity of the regions. The "is valid" message will be true if there are no overlaps. The validation message would show you detailed information on the overlapping regions and the overlap percentage. Although the methodology used requires zero overlaps, the issue is resolved in the flux attention control with feathering. Overlapping will only be an issue if it is excessive.</br>
+**Region Mask Validator:** This node calculates the validity of the regions. The "is valid" message will be true if there are no overlaps. The validation message would show you detailed information on the overlapping regions and the overlap percentage. Although the methodology used requires zero overlaps, the issue is resolved in the flux attention control with feathering. Overlapping will only be an issue if it is excessive, beyond 40-50%.</br>
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4946.png)</br>
 
