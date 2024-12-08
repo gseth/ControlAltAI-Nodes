@@ -1,7 +1,7 @@
 print("\n\033[32mInitializing ControlAltAI Nodes\033[0m")  # Fixed green reset
 try:
    import xformers
-   print("\n\033[94mControlAltAI: xformers found!\033[0m")  # Light blue
+   print("\033[94mControlAltAI: xformers found!\033[0m")  # Light blue
 except ImportError:
    print("\n" + "="*70)
    print("\033[94mCONTROLALTAI-NODES: XFORMERS REQUIRED\033[0m")  # Light blue
