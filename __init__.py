@@ -1,3 +1,15 @@
+print("\n\033[32mInitializing ControlAltAI Nodes\033[0m")  # Fixed green reset
+try:
+   import xformers
+   print("\n\033[94mControlAltAI: xformers found!\033[0m")  # Light blue
+except ImportError:
+   print("\n" + "="*70)
+   print("\033[94mCONTROLALTAI-NODES: XFORMERS REQUIRED\033[0m")  # Light blue
+   print("\033[33mSome nodes in this custom node pack require xformers to function properly.")  # Start orange
+   print("\nPlease check \"import_error_solution.txt\" in ComfyUI\\custom_nodes\\ControlAltAI-Nodes for how to install XFormers\033[0m")  # End orange
+   print("="*70 + "\n")
+   raise ImportError("xformers is required for ControlAltAI Nodes")
+
 from .flux_resolution_cal_node import FluxResolutionNode
 from .flux_sampler_node import FluxSampler
 from .flux_union_controlnet_node import FluxUnionControlNetApply
@@ -14,8 +26,6 @@ from .region_mask_conditioning_node import RegionMaskConditioning
 from .flux_attention_control_node import FluxAttentionControl
 from .region_overlay_visualizer_node import RegionOverlayVisualizer
 from .flux_attention_cleanup_node import FluxAttentionCleanup
-
-print("Initializing ControlAltAI Nodes")
 
 NODE_CLASS_MAPPINGS = {
     "FluxResolutionNode": FluxResolutionNode,
