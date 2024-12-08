@@ -4,6 +4,10 @@ Go to your python_embeded folder and Check your pytorch and cuda version:
 
 python.exe -c "import torch; print(torch.__version__)"
 
+check for xformers if installed:
+
+python.exe -m pip show xformers
+
 Please go to: https://github.com/facebookresearch/xformers/releases
 
 Check for the latest Xformers version that is compatible with your installed Pytorch version.
@@ -12,7 +16,7 @@ You can Install the latest version of xformers using this command:
 
 python.exe -m pip install xformers==PUTVERSIONHERE --index-url https://download.pytorch.org/whl/cuVERSION
 
-example:
+example For PyTorch 2.5.1 with CUDA 12.4:
 python.exe -m pip install xformers==0.0.28.post3 --index-url https://download.pytorch.org/whl/cu124
 
 As of 8th December 2024:
