@@ -213,7 +213,7 @@ The node pipeline is as follows: Region Mask Generator --> Region Mask Processor
 
 **Flux Attention Cleanup:** Since the attention is overridden in the model, a tensor mismatch error will occur when you switch the workflow. We also do not want the attention to be cleaned up in the existing workflow. This node automatically will preserve attention during re-runs in the existing workflow, but when switching workflow will do a fresh clean up and restore flux original attention. This process is achieved without a model unload or manual cache cleanup, as they will not work.</br>
 
-![ComfyUI Screenshot](https://gseth.com/images/SNAG-4952.png)</br>
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4954.png)</br>
 
 **Xformers & Token Limits:** The pipeline here needs VRAM to be stored in the same GPU while Flux, LoRA, and Dual Clip are loaded. Due to this, XFormers is required to optimize VRAM Usage. The total tensor size is approximately 5000x5000 for a 24GB VRAM GPU. This limit is set on purpose for consumer-grade hardware and will be increased with the release of a 5090 GPU. Due to this tensor size limitation, token size is also limited when using Dual Clip. Single Clip is not recommended. Use only Dual Clip. When Base Plus all 3 Regions are connected, a max token for each clip l and t5xxl should be 80 or less. 160 Tokens when combined. In other words, you can use (160 x 4 = 640) tokens in total before running into a tensor size error. Reduce prompt tokens when you get a tensor size error. This system was implemented to avoid any OOM errors (out-of-memory errors) on a 24GB VRAM GPU. All testing has been done on Flux 1.dev model with FP8 and t5xxl with FP 16 without any OOM on a 4090.
 
