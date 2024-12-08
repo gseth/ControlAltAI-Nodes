@@ -7,17 +7,32 @@ import comfy.model_management as model_management
 from comfy.ldm.modules import attention as comfy_attention
 from comfy.ldm.flux import math as flux_math
 from comfy.ldm.flux import layers as flux_layers
-from xformers.ops import memory_efficient_attention as xattention
 import numpy as np
 from PIL import Image, ImageFilter, ImageDraw
 from functools import partial
 
 class FluxAttentionControl:
+    has_xformers = False
+    xattention = None
+
     def __init__(self):
         self.original_attention = comfy_attention.optimized_attention
         self.original_flux_attention = flux_math.attention
         self.original_flux_layers_attention = flux_layers.attention
         print("FluxAttentionControl initialized")
+
+    def check_xformers(self):
+        if not self.has_xformers:
+            try:
+                from xformers.ops import memory_efficient_attention
+                self.__class__.xattention = memory_efficient_attention
+                self.__class__.has_xformers = True
+            except ImportError:
+                print("\n" + "="*70)
+                print("\033[94mControlAltAI-Nodes: This node requires xformers to function.\033[0m")
+                print("\033[33mPlease check \"xformers_instructions.txt\" in ComfyUI\\custom_nodes\\ControlAltAI-Nodes for how to install XFormers\033[0m")
+                print("="*70 + "\n")
+                raise ImportError("xformers is required for this node")
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -109,7 +124,6 @@ class FluxAttentionControl:
         return lin_masks, hH, hW
 
     def prepare_attention_mask(self, lin_masks: List[torch.Tensor], region_strengths: List[float], Nx: int, emb_size: int, emb_len: int):
-        """Prepare attention mask for three regions with per-region strengths."""
         total_len = emb_len + Nx
         n_regs = len(lin_masks)
         
@@ -127,7 +141,7 @@ class FluxAttentionControl:
         subprompt_ends = [emb_size * (i + 2) for i in range(n_regs)]
         
         # Initialize position masks
-        position_masks = torch.stack(lin_masks)  # Shape: [n_regs, Nx]
+        position_masks = torch.stack(lin_masks)
 
         # Normalize masks so that overlapping areas sum to 1
         position_masks_sum = position_masks.sum(dim=0)
@@ -146,7 +160,7 @@ class FluxAttentionControl:
 
             # Create mask including tokens and positions
             m_with_tokens = torch.cat([torch.ones(emb_len), mask_i])
-            mb = m_with_tokens > 0.0  # Include positions where mask > 0
+            mb = m_with_tokens > 0.0
 
             # Block attention between positions not in mask and subprompt
             cross_mask[~mb, sp_start:sp_end] = 1
@@ -176,14 +190,17 @@ class FluxAttentionControl:
 
     def xformers_attention(self, q: Tensor, k: Tensor, v: Tensor, pe: Tensor,
                           attn_mask: Optional[Tensor] = None) -> Tensor:
+        if not self.has_xformers:
+            raise ImportError("xformers is required for this node")
+            
         q, k = flux_math.apply_rope(q, k, pe)
         q = rearrange(q, "B H L D -> B L H D")
         k = rearrange(k, "B H L D -> B L H D")
         v = rearrange(v, "B H L D -> B L H D")
         if attn_mask is not None:
-            x = xattention(q, k, v, attn_bias=attn_mask)
+            x = self.xattention(q, k, v, attn_bias=attn_mask)
         else:
-            x = xattention(q, k, v)
+            x = self.xattention(q, k, v)
         x = rearrange(x, "B L H D -> B L (H D)")
         return x
 
@@ -199,8 +216,10 @@ class FluxAttentionControl:
                               feather_radius2: Optional[float] = 0.0,
                               region3: Optional[Dict] = None,
                               feather_radius3: Optional[float] = 0.0):
+        
+        self.check_xformers()  # Only check xformers when node is used
 
-        # Extract dimensions and embeddings first (moved before enabled check)
+        # Extract dimensions and embeddings
         latent = latent_dimensions["samples"]
         bs_l, n_ch, lH, lW = latent.shape
         text_emb = condition[0][0].clone()
@@ -213,17 +232,9 @@ class FluxAttentionControl:
             flux_math.attention = self.original_flux_attention
             flux_layers.attention = self.original_flux_layers_attention
             print("Regional control disabled. Restored original attention functions.")
-            return (model, condition)  # Return original condition when disabled
+            return (model, condition)
 
         print(f'Region attention Node enabled: {enabled}, regions: {number_of_regions}')
-
-        # Extract dimensions and embeddings
-        latent = latent_dimensions["samples"]
-        bs_l, n_ch, lH, lW = latent.shape
-        text_emb = condition[0][0].clone()
-        clip_emb = condition[0][1]['pooled_output'].clone()
-        bs, emb_size, emb_dim = text_emb.shape
-        iH, iW = lH * 8, lW * 8
 
         # Process active regions
         subprompts_embeds = []
@@ -236,12 +247,10 @@ class FluxAttentionControl:
 
         for idx, region in enumerate(regions[:number_of_regions]):
             if region is not None and region.get('conditioning') is not None:
-                # Get 'strength' from region or default to 1.0
                 strength = region.get('strength', 1.0)
                 region_strengths.append(strength)
                 subprompt_emb = region['conditioning'][0][0]
                 subprompts_embeds.append(subprompt_emb)
-                # Use per-region feather_radius
                 feather_radius = feather_radii[idx] if feather_radii[idx] is not None else 0.0
                 masks.append(self.generate_region_mask(region, iW, iH, feather_radius))
             else:
@@ -249,7 +258,6 @@ class FluxAttentionControl:
 
         if not subprompts_embeds:
             print("No active regions with conditioning found.")
-            # Restore original attention functions
             flux_math.attention = self.original_flux_attention
             flux_layers.attention = self.original_flux_layers_attention
             return (model, condition)
@@ -273,17 +281,13 @@ class FluxAttentionControl:
             print(f'Applying attention masks: torch.Size([{attn_mask.shape[0]}, {attn_mask.shape[1]}])')
             L = attn_mask.shape[0]
             H = 24  # Number of heads in FLUX model
-            pad = (8 - L % 8) % 8  # Ensure pad is between 0 and 7
+            pad = (8 - L % 8) % 8
             pad_L = L + pad
             mask_out = torch.zeros([bs, H, pad_L, pad_L], dtype=attn_dtype, device=device)
             mask_out[:, :, :L, :L] = attn_mask.to(device, dtype=attn_dtype)
-            attn_mask = mask_out[:, :, :pad_L, :pad_L]
+            attn_mask = mask_out
 
-        # Prepare final mask
-        attn_mask_bool = attn_mask > 0.5
-        attn_mask.masked_fill_(attn_mask_bool, float('-inf'))
-        
-        # Override attention
+        # Override attention functions
         attn_mask_arg = attn_mask if enabled else None
         override_attention = partial(self.xformers_attention, attn_mask=attn_mask_arg)
         flux_math.attention = override_attention
