@@ -193,7 +193,7 @@ The node pipeline is as follows: Region Mask Generator --> Region Mask Processor
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4945.png)</br>
 
-**Region Mask Processor:** This node processes the generated mask and applies Gaussian Blue and feathering. This pre-processor node preprocesses the mask and sends the preprocessed information in the pipeline.</br>
+**Region Mask Processor:** This node processes the generated mask and applies Gaussian Blur and feathering. This pre-processor node preprocesses the mask and sends the preprocessed information in the pipeline.</br>
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4947.png)</br>
 
