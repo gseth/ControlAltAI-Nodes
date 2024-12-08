@@ -1,3 +1,5 @@
+#Requirements Update: 8 Dec 2024: XFormers is now needed. You can install Xformers without breaking dependencies. PLease follow instructions here: https://github.com/gseth/ControlAltAI-Nodes/issues/9#issuecomment-2525463302
+
 # ComfyUI ControlAltAI Nodes
 
 This repository contains custom nodes designed for the ComfyUI framework, focusing on quality-of-life improvements. These nodes aim to make tasks easier and more efficient. Two Flux nodes are available to enhance functionality and streamline workflows within ComfyUI.
