@@ -255,7 +255,7 @@ Simple Splitting Blend: Base Conditioning + 1 Region
 ![ComfyUI Screenshot](https://gseth.com/images/region_control_14.png)
 
 **Example 7**<br>
-Color Manipulation: Base Conditioning (ignored) + 3 Regions
+Color Manipulation: Base Conditioning (ignored) + 2 Regions
 ![ComfyUI Screenshot](https://gseth.com/images/region_control_15.png)
 ![ComfyUI Screenshot](https://gseth.com/images/region_control_16.png)
 
