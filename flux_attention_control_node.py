@@ -13,26 +13,17 @@ from functools import partial
 
 class FluxAttentionControl:
     has_xformers = False
-    xattention = None
+    try:
+        from xformers.ops import memory_efficient_attention as xattention
+        has_xformers = True
+    except ImportError:
+        pass
 
     def __init__(self):
         self.original_attention = comfy_attention.optimized_attention
         self.original_flux_attention = flux_math.attention
         self.original_flux_layers_attention = flux_layers.attention
         print("FluxAttentionControl initialized")
-
-    def check_xformers(self):
-        if not self.has_xformers:
-            try:
-                from xformers.ops import memory_efficient_attention
-                self.__class__.xattention = memory_efficient_attention
-                self.__class__.has_xformers = True
-            except ImportError:
-                print("\n" + "="*70)
-                print("\033[94mControlAltAI-Nodes: This node requires xformers to function.\033[0m")
-                print("\033[33mPlease check \"xformers_instructions.txt\" in ComfyUI\\custom_nodes\\ControlAltAI-Nodes for how to install XFormers\033[0m")
-                print("="*70 + "\n")
-                raise ImportError("xformers is required for this node")
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -191,6 +182,10 @@ class FluxAttentionControl:
     def xformers_attention(self, q: Tensor, k: Tensor, v: Tensor, pe: Tensor,
                           attn_mask: Optional[Tensor] = None) -> Tensor:
         if not self.has_xformers:
+            print("\n" + "="*70)
+            print("\033[94mControlAltAI-Nodes: This node requires xformers to function.\033[0m")
+            print("\033[33mPlease check \"xformers_instructions.txt\" in ComfyUI\\custom_nodes\\ControlAltAI-Nodes for how to install XFormers\033[0m")
+            print("="*70 + "\n")
             raise ImportError("xformers is required for this node")
             
         q, k = flux_math.apply_rope(q, k, pe)
@@ -217,8 +212,6 @@ class FluxAttentionControl:
                               region3: Optional[Dict] = None,
                               feather_radius3: Optional[float] = 0.0):
         
-        self.check_xformers()  # Only check xformers when node is used
-
         # Extract dimensions and embeddings
         latent = latent_dimensions["samples"]
         bs_l, n_ch, lH, lW = latent.shape
