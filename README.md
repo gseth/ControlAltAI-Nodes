@@ -250,16 +250,11 @@ Simple Splitting Blend: Base Conditioning + 1 Region
 ![ComfyUI Screenshot](https://gseth.com/images/region_control_8.png)
 
 **Example 6**<br>
-3 Region Split Contrast: Base Conditioning (ignored) + 3 Regions
-![ComfyUI Screenshot](https://gseth.com/images/region_control_9.png)
-![ComfyUI Screenshot](https://gseth.com/images/region_control_10.png)
-
-**Example 7**<br>
 3 Region Split Blend using Advance LLM: Base Conditioning (ignored) + 3 Regions
 ![ComfyUI Screenshot](https://gseth.com/images/region_control_13.png)
 ![ComfyUI Screenshot](https://gseth.com/images/region_control_14.png)
 
-**Example 8**<br>
+**Example 7**<br>
 Color Manipulation: Base Conditioning (ignored) + 3 Regions
 ![ComfyUI Screenshot](https://gseth.com/images/region_control_15.png)
 ![ComfyUI Screenshot](https://gseth.com/images/region_control_16.png)
