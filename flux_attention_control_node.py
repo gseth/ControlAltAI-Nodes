@@ -7,27 +7,29 @@ import comfy.model_management as model_management
 from comfy.ldm.modules import attention as comfy_attention
 from comfy.ldm.flux import math as flux_math
 from comfy.ldm.flux import layers as flux_layers
-from xformers.ops import memory_efficient_attention as xattention
 import numpy as np
 from PIL import Image, ImageFilter, ImageDraw
 from functools import partial
 
-class FluxAttentionControl:
+# Protected xformers import
+try:
+    from xformers.ops import memory_efficient_attention as xattention
+    has_xformers = True
+except ImportError:
     has_xformers = False
-    try:
-        from xformers.ops import memory_efficient_attention as xattention
-        has_xformers = True
-    except ImportError:
-        print("\n" + "="*70)
-        print("\033[94mControlAltAI-Nodes: This node requires xformers to function.\033[0m")
-        print("\033[33mPlease check \"xformers_instructions.txt\" in ComfyUI\\custom_nodes\\ControlAltAI-Nodes for how to install XFormers\033[0m")
-        print("="*70 + "\n")
+    xattention = None
 
+class FluxAttentionControl:
     def __init__(self):
         self.original_attention = comfy_attention.optimized_attention
         self.original_flux_attention = flux_math.attention
         self.original_flux_layers_attention = flux_layers.attention
-        print("FluxAttentionControl initialized")      
+        if not has_xformers:
+            print("\n" + "="*70)
+            print("\033[94mControlAltAI-Nodes: This node requires xformers to function.\033[0m")
+            print("\033[33mPlease check \"xformers_instructions.txt\" in ComfyUI\\custom_nodes\\ControlAltAI-Nodes for how to install XFormers\033[0m")
+            print("="*70 + "\n")
+        print("FluxAttentionControl initialized")         
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -224,6 +226,9 @@ class FluxAttentionControl:
             flux_layers.attention = self.original_flux_layers_attention
             print("Regional control disabled. Restored original attention functions.")
             return (model, condition)  # Return original condition when disabled
+
+        if enabled and not has_xformers:
+            raise RuntimeError("Xformers is required for this node when enabled. Please install xformers.")
 
         print(f'Region attention Node enabled: {enabled}, regions: {number_of_regions}')
 
