@@ -278,6 +278,10 @@ Black Forest Labs, a pioneering AI research organization, has developed the Flux
 
 For more details on these models, their capabilities, and licensing information, you can visit the <a href="https://blackforestlabs.ai/">Black Forest Labs website</a>
 
+### Flux Regional Spatial Control Acknowledgment
+
+Inspired from: <a href="https://github.com/attashe/ComfyUI-FluxRegionAttention">Flux Region Attention by Attashe</a>
+
 ### License
 
 This project is licensed under the MIT License.
