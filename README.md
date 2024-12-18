@@ -265,7 +265,7 @@ Color Manipulation: Base Conditioning (ignored) + 2 Regions
 ![ComfyUI Screenshot](https://gseth.com/images/region_control_15.png)
 ![ComfyUI Screenshot](https://gseth.com/images/region_control_16.png)
 
-**YouTube tutorial Flux Region Usage: <a href="">Coming Soon</a>**
+**YouTube tutorial Flux Region Usage: <a href="https://youtu.be/kNwz6kJRDc0">Flux Region Spatial Control Tutorial</a>**
 
 ### YouTube ComfyUI Tutorials
 
