@@ -187,15 +187,21 @@ class FluxAttentionControl:
         return cross_mask, q_scale, k_scale
 
     def xformers_attention(self, q: Tensor, k: Tensor, v: Tensor, pe: Tensor,
-                          attn_mask: Optional[Tensor] = None) -> Tensor:
+                            attn_mask: Optional[Tensor] = None,
+                            mask: Optional[Tensor] = None) -> Tensor:  # Added mask parameter
         q, k = flux_math.apply_rope(q, k, pe)
         q = rearrange(q, "B H L D -> B L H D")
         k = rearrange(k, "B H L D -> B L H D")
         v = rearrange(v, "B H L D -> B L H D")
-        if attn_mask is not None:
-            x = xattention(q, k, v, attn_bias=attn_mask)
+        
+        # Use attn_mask if provided, otherwise use the mask parameter
+        attention_bias = attn_mask if attn_mask is not None else mask
+        
+        if attention_bias is not None:
+            x = xattention(q, k, v, attn_bias=attention_bias)
         else:
             x = xattention(q, k, v)
+            
         x = rearrange(x, "B L H D -> B L (H D)")
         return x
 
