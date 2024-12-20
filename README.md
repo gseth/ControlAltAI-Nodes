@@ -1,4 +1,4 @@
-### Requirements Update: 8 Dec 2024: Flux Attention Control Node requires XFormers. Check your version of PyTorch and install a compatible version of XFormers. Please follow the instructions here: <a href="https://github.com/gseth/ControlAltAI-Nodes/blob/master/xformers_instructions.txt">xformers_instructions</a>
+### Update: 20 Dec 2024: Due to the addition of attention mask in Flux and change of environment here: https://github.com/comfyanonymous/ComfyUI/pull/5942, Flux Region Spatial Control code is now redundant and will only work with older versions of comfy UI. This will not work in ComfyUI v0.3.8-4-g3cacd3f, ComfyUI_frontend v1.5.19 and above. </a>
 
 # ComfyUI ControlAltAI Nodes
 
