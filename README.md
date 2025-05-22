@@ -8,7 +8,7 @@ This repository contains custom nodes designed for the ComfyUI framework, focusi
 
 ### List of Nodes:
 - Flux
-  - Flux Resolution Calculator
+  - Flux Resolution Calculator (Updated May 2025)
   - Flux Sampler
   - Flux Union ControlNet Apply
 - Logic
@@ -32,10 +32,11 @@ This repository contains custom nodes designed for the ComfyUI framework, focusi
 
 The Flux Resolution Calculator is designed to determine the optimal image resolution for outputs generated using the Flux model, which is notably more oriented towards megapixels. Unlike traditional methods that rely on standard SDXL resolutions, this calculator operates based on user-specified megapixel inputs. Users can select their desired megapixel count, ranging from 0.1 to 2.0 megapixels, and aspect ratio. The calculator then provides the exact image dimensions necessary for optimal performance with the Flux model. This approach ensures that the generated images meet specific quality and size requirements tailored to the user's needs. Additionally, while the official limit is 2.0 megapixels, during testing, I have successfully generated images at higher resolutions, indicating the model's flexibility in accommodating various image dimensions without compromising quality.
 
-- **Supported Megapixels:** 0.1 MP, 1.0 MP, 2.0 MP, 2.1 MP, 2.2 MP, 2.3 MP, 2.4MP, 2.5MP
+- **Supported Megapixels:** 0.1 MP - 2.5 MP (change stepping to 0.1 for fine-tuned selection)
 - **Note:** Generations above 1 MP may appear slightly blurry, but resolutions of 3k+ have been successfully tested on the Flux1.Dev model.
-- **Custom Ratio:** Custom Ratio is now supported. Enable or Disable Custom Ratio and input any ratio. (Example: 4:9).
+- **Custom Ratio:** Custom Ratio is now supported. Enable or Disable the Custom Ratio and input any ratio. (Example: 4:9).
 - **Preview:** The preview node is just a visual representation of the ratio.
+- **Divisible By:** You can now choose the divisibility by 8/16/32/64. By default, it is 64. To get fine-tuned results, choose divisibility by 8. Divisibility by 32/64 is recommended for Flux Dev 1.
 
 ### Flux Sampler
 
@@ -46,9 +47,9 @@ The Flux Sampler node combines the functionality of the CustomSamplerAdvance nod
 - **Compatibility:** Only the samplers and schedulers compatible with the Flux model are included.
 - **Latent Compatibility:** Use SD3 Empty Latent Image only. The normal empty latent image node is not compatible.
 
-![ComfyUI Screenshot](https://gseth.com/images/SNAG-4942.png)
-![ComfyUI Screenshot](https://gseth.com/images/SNAG-4941.png)
-![ComfyUI Screenshot](https://gseth.com/images/SNAG-4943.png)
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-7361.png)
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-7362.png)
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-7363.png)
 
 ### Flux Union ControlNet Apply
 
