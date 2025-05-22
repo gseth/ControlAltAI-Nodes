@@ -9,9 +9,12 @@ def pil2tensor(image):
 class FluxResolutionNode:
     @classmethod
     def INPUT_TYPES(cls):
+        # Generate megapixel options from 0.1 to 2.5 with 0.1 increments
+        megapixel_options = [f"{i/10:.1f}" for i in range(1, 26)]  # 0.1 to 2.5
+        
         return {
             "required": {
-                "megapixel": (["0.1", "0.5", "1.0", "1.5", "2.0", "2.1", "2.2", "2.3", "2.4", "2.5"], {"default": "1.0"}),
+                "megapixel": (megapixel_options, {"default": "1.0"}),
                 "aspect_ratio": ([
                     "1:1 (Perfect Square)",
                     "2:3 (Classic Portrait)", "3:4 (Golden Ratio)", "3:5 (Elegant Vertical)", "4:5 (Artistic Frame)", "5:7 (Balanced Portrait)", "5:8 (Tall Portrait)",
@@ -19,6 +22,7 @@ class FluxResolutionNode:
                     "3:2 (Golden Landscape)", "4:3 (Classic Landscape)", "5:3 (Wide Horizon)", "5:4 (Balanced Frame)", "7:5 (Elegant Landscape)", "8:5 (Cinematic View)",
                     "9:7 (Artful Horizon)", "16:9 (Panorama)", "19:9 (Cinematic Ultrawide)", "21:9 (Epic Ultrawide)", "32:9 (Extreme Ultrawide)"
                 ], {"default": "1:1 (Perfect Square)"}),
+                "divisible_by": (["8", "16", "32", "64"], {"default": "64"}),
                 "custom_ratio": ("BOOLEAN", {"default": False, "label_on": "Enable", "label_off": "Disable"}),
             },
             "optional": {
@@ -101,8 +105,9 @@ class FluxResolutionNode:
         # Convert to tensor using the helper function
         return pil2tensor(image)
 
-    def calculate_dimensions(self, megapixel, aspect_ratio, custom_ratio, custom_aspect_ratio=None):
+    def calculate_dimensions(self, megapixel, aspect_ratio, divisible_by, custom_ratio, custom_aspect_ratio=None):
         megapixel = float(megapixel)
+        round_to = int(divisible_by)
         
         if custom_ratio and custom_aspect_ratio:
             numeric_ratio = custom_aspect_ratio
@@ -118,14 +123,7 @@ class FluxResolutionNode:
         width = int(dimension * width_ratio)
         height = int(dimension * height_ratio)
 
-        # Apply rounding logic based on megapixel value
-        if megapixel in [0.1, 0.5]:
-            round_to = 8
-        elif megapixel in [1.0, 1.5]:
-            round_to = 64
-        else:  # 2.0 and above
-            round_to = 32
-
+        # Apply user-selected rounding
         width = round(width / round_to) * round_to
         height = round(height / round_to) * round_to
 
