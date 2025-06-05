@@ -1,5 +1,3 @@
-### Requirements Update: 8 Dec 2024: Flux Attention Control Node requires XFormers. Check your version of PyTorch and install a compatible version of XFormers. Please follow the instructions here: <a href="https://github.com/gseth/ControlAltAI-Nodes/blob/master/xformers_instructions.txt">xformers_instructions</a>
-
 # ComfyUI ControlAltAI Nodes
 
 This repository contains custom nodes designed for the ComfyUI framework, focusing on quality-of-life improvements. These nodes aim to make tasks easier and more efficient. Two Flux nodes are available to enhance functionality and streamline workflows within ComfyUI.
@@ -8,16 +6,20 @@ This repository contains custom nodes designed for the ComfyUI framework, focusi
 
 ### List of Nodes:
 - Flux
-  - Flux Resolution Calculator (Updated May 2025)
+  - Flux Resolution Calculator (Updated, May 2025)
   - Flux Sampler
   - Flux Union ControlNet Apply
 - Logic
   - Boolean Basic
   - Boolean Reverse
   - Integer Settings
+  - Integer Settings Advanced (New, June 2025)
+  - Switch Two Way (New, June 2025)
+  - Switch Three Way (New, June 2025)
   - Choose Upscale Model
 - Image
   - Get Image Size & Ratio
+  - Perturbation Texture (New, June 2025)
   - Noise Plus Blend
 - Flux Region
   - Region Mask Generator
@@ -27,6 +29,10 @@ This repository contains custom nodes designed for the ComfyUI framework, focusi
   - Flux Attention Control
   - Region Overlay Visualizer
   - Flux Attention Cleanup
+ - HiDream
+  - HiDream Resolution (New, June 2025)
+- Utility
+  - Text Bridge (New, June 2025)
 
 ### Flux Resolution Calculator
 
@@ -98,7 +104,7 @@ Results: (Canny and Depth Examples not included. They are straightforward.)<br><
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4364.png)
 
 **Re-Color**<br><br>
-![ComfyUI Screenshot](https://gseth.com/images/SNAG-4390.png)
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4390_1.png)
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4392.png)
 
@@ -117,17 +123,61 @@ This node is designed to get the image resolution in width, height, and ratio. T
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-3959.png)
 
-### Integer Setting
+### Integer Settings
 This node is designed to give output as a raw value of 1 or 2 integers. Enable = 2, Disable = 1.
 
 Use case: This can be set up before a two-way switch, allowing workflow logical control to flow in one or the other direction. As of now, it only controls two logical flows. In the future, we will upgrade the node to support three or more logical switch flows.
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4239.png)
 
+### Integer Settings Advanced
+This node is designed to give output as a raw value of 1, 2 or 3 integers. Only one integer output can be enabled at a time. Connect this node with the new Switch (Three Way) for logical control.
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4239.png)
+
+### Switch (Two Way) / Switch (Three Way)
+Unlike traditional switches, which accept only one type of input, these switches will accept multiple input types and pass through those inputs if connected to the correct output. Now seamlessly connect Switch (Two Way) with the Integer Settings and the Switch (Three Way) with the Integer Settings Advanced Nodes.
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-7519.png)
+
 ### Choose Upscale Model
 A simple node that can be connected with a boolean logic. A true response will use upscale model 1, and a false response will use upscale model 2.
 
-![ComfyUI Screenshot](https://gseth.com/images/SNAG-4240.png)
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-7521.png)
+
+### Perturbation Texture Node
+This node adds realistic texture overlays to images using advanced noise generation techniques. This node is particularly useful for enhancing portraits, adding film grain effects, or creating natural surface textures. This is an advanced version of the Noise Plus Blend Node. The node generates multi-channel noise patterns that respect the original image's color distribution, creating realistic textures that enhance rather than overpower the source material. Can be used pre/post upscale (pixel-to-pixel). 
+
+**Settings:**<br>
+noise_scale: 0.25 - 0.50.<br>
+texture_strength: 10-50.<br>
+perturbation_factor: 0.10-0.25.
+
+Node can be used with or without a mask.
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-7522.png)
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-7523.png)
+
+**Texture Type:**<br>
+Natural: Balanced, organic texture — ideal for stylized portraits or general image enhancement without overwhelming details.<br>
+Film Grain: Adds cinematic noise — great for final renders or creative film looks.<br>
+Skin Pore: Subtle realism — best for **close-ups** or portraits needing natural facial texture.<br>
+Fine Details: Emphasizes high-frequency textures — perfect for mechanical, fabric, or intricate object renders.
+
+Results:
+**Example 1**<br>
+Without Perturbation:
+![ComfyUI Screenshot](https://gseth.com/images/results_h_1.png)
+
+With Perturbation:
+![ComfyUI Screenshot](https://gseth.com/images/results_p_1.png)
+
+**Example 2**<br>
+Without Perturbation:
+![ComfyUI Screenshot](https://gseth.com/images/results_h_2.png)
+
+With Perturbation:
+![ComfyUI Screenshot](https://gseth.com/images/results_p_2.png)
 
 ### Noise Plus Blend
 This node will generate a Gaussian blur noise based on the dimensions of the input image and will blend the noise into the entire image or only the mask region.
@@ -209,6 +259,7 @@ The node pipeline is as follows: Region Mask Generator --> Region Mask Processor
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4950.png)</br>
 
 **Flux Attention Control:** The node takes the region conditioning + base conditioning + the feathering strengths and all the previous information in the pipeline and overrides the Flux Attention. When disabled, it only passes through the base conditioning to the Sampler.</br>
+### Requirements Update: 8 Dec 2024: Flux Attention Control Node requires XFormers. Check your version of PyTorch and install a compatible version of XFormers. Please follow the instructions here: <a href="https://github.com/gseth/ControlAltAI-Nodes/blob/master/xformers_instructions.txt">xformers_instructions</a>
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-4951.png)</br>
 
@@ -268,6 +319,21 @@ Color Manipulation: Base Conditioning (ignored) + 2 Regions
 
 **YouTube tutorial Flux Region Usage: <a href="https://youtu.be/kNwz6kJRDc0">Flux Region Spatial Control Tutorial</a>**
 
+### HiDream Resolution
+HiDream supports hard-coded resolutions, similar to SDXL, and is very different from the pixel-based resolution supported by Flux.
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-7524.png)
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-7525.png)
+
+### Text Bridge
+Utility node that provides flexible text input/output management with manual editing capabilities. This node serves as a text processing hub, accepting text from other nodes while allowing for manual overrides and edits.
+
+**Passthrough Mode:** When connected to another node and the text input field is empty, the incoming text is passed through unchanged.<br>
+**Manual Override:** When text is entered in the text input field, it uses that text instead of any passthrough input.<br>
+**Standalone Mode:** Functions as a simple text input node when no passthrough connection is made.
+
+**YouTube tutorial for HiDream Perturbated Pipeline: Coming Soon**
+
 ### YouTube ComfyUI Tutorials
 
 We are a team of two and create extensive tutorials for ComfyUI. Check out our YouTube channel:</br>
@@ -278,6 +344,10 @@ We are a team of two and create extensive tutorials for ComfyUI. Check out our Y
 Black Forest Labs, a pioneering AI research organization, has developed the Flux model series, which includes the Flux1.[dev] and Flux1.[schnell] models. These models are designed to push the boundaries of image generation through advanced deep-learning techniques.
 
 For more details on these models, their capabilities, and licensing information, you can visit the <a href="https://blackforestlabs.ai/">Black Forest Labs website</a>
+
+### HiDream
+
+<a href="https://github.com/HiDream-ai/HiDream-I1">HiDream-I1 GitHub</a>: A High-Efficient Image Generative Foundation Model with Sparse Diffusion Transformer. Visit <a href="https://vivago.ai/">Vivago AI Website</a>
 
 ### Flux Regional Spatial Control Acknowledgment
 
