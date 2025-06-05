@@ -158,13 +158,13 @@ Node can be used with or without a mask.
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-7522.png)
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-7523.png)
 
-**Texture Type:**<br>
-Natural: Balanced, organic texture — ideal for stylized portraits or general image enhancement without overwhelming details.<br>
-Film Grain: Adds cinematic noise — great for final renders or creative film looks.<br>
-Skin Pore: Subtle realism — best for **close-ups** or portraits needing natural facial texture.<br>
-Fine Details: Emphasizes high-frequency textures — perfect for mechanical, fabric, or intricate object renders.
+**Texture Type:**
+- Natural: Balanced, organic texture — ideal for stylized portraits or general image enhancement without overwhelming details.
+- Film Grain: Adds cinematic noise — great for final renders or creative film looks.
+- Skin Pore: Subtle realism — best for **close-ups** or portraits needing natural facial texture.
+- Fine Details: Emphasizes high-frequency textures — perfect for mechanical, fabric, or intricate object renders.
 
-Results:
+Results:<br>
 **Example 1**<br>
 Without Perturbation:
 ![ComfyUI Screenshot](https://gseth.com/images/results_h_1.png)
@@ -328,9 +328,9 @@ HiDream supports hard-coded resolutions, similar to SDXL, and differs significan
 ### Text Bridge
 Utility node that provides flexible text input/output management with manual editing capabilities. This node serves as a text processing hub, accepting text from other nodes while allowing for manual overrides and edits.
 
-**Passthrough Mode:** When connected to another node and the text input field is empty, the incoming text is passed through unchanged.<br>
-**Manual Override:** When text is entered in the text input field, it uses that text instead of any passthrough input.<br>
-**Standalone Mode:** Functions as a simple text input node when no passthrough connection is made.
+- **Passthrough Mode:** When connected to another node and the text input field is empty, the incoming text is passed through unchanged.
+- **Manual Override:** When text is entered in the text input field, it uses that text instead of any passthrough input.
+- **Standalone Mode:** Functions as a simple text input node when no passthrough connection is made.
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-7527.png)
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-7528.png)
