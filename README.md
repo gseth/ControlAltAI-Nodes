@@ -40,7 +40,7 @@ The Flux Resolution Calculator is designed to determine the optimal image resolu
 
 - **Supported Megapixels:** 0.1 MP - 2.5 MP (change stepping to 0.1 for fine-tuned selection)
 - **Note:** Generations above 1 MP may appear slightly blurry, but resolutions of 3k+ have been successfully tested on the Flux1.Dev model.
-- **Custom Ratio:** Custom Ratio is now supported. Enable or Disable the Custom Ratio and input any ratio. (Example: 4:9).
+- **Custom Ratio:** Custom Ratio is now supported. Enable or disable the Custom Ratio and input any ratio. (Example: 4:9).
 - **Preview:** The preview node is just a visual representation of the ratio.
 - **Divisible By:** You can now choose the divisibility by 8/16/32/64. By default, it is 64. To get fine-tuned results, choose divisibility by 8. Divisibility by 32/64 is recommended for Flux Dev 1.
 
@@ -133,7 +133,7 @@ Use case: This can be set up before a two-way switch, allowing workflow logical 
 ### Integer Settings Advanced
 This node is designed to give output as a raw value of 1, 2 or 3 integers. Only one integer output can be enabled at a time. Connect this node with the new Switch (Three Way) for logical control.
 
-![ComfyUI Screenshot](https://gseth.com/images/SNAG-4239.png)
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-7521.png)
 
 ### Switch (Two Way) / Switch (Three Way)
 Unlike traditional switches, which accept only one type of input, these switches will accept multiple input types and pass through those inputs if connected to the correct output. Now seamlessly connect Switch (Two Way) with the Integer Settings and the Switch (Three Way) with the Integer Settings Advanced Nodes.
@@ -143,7 +143,7 @@ Unlike traditional switches, which accept only one type of input, these switches
 ### Choose Upscale Model
 A simple node that can be connected with a boolean logic. A true response will use upscale model 1, and a false response will use upscale model 2.
 
-![ComfyUI Screenshot](https://gseth.com/images/SNAG-7521.png)
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-4240.png)
 
 ### Perturbation Texture Node
 This node adds realistic texture overlays to images using advanced noise generation techniques. This node is particularly useful for enhancing portraits, adding film grain effects, or creating natural surface textures. This is an advanced version of the Noise Plus Blend Node. The node generates multi-channel noise patterns that respect the original image's color distribution, creating realistic textures that enhance rather than overpower the source material. Can be used pre/post upscale (pixel-to-pixel). 
@@ -331,6 +331,9 @@ Utility node that provides flexible text input/output management with manual edi
 **Passthrough Mode:** When connected to another node and the text input field is empty, the incoming text is passed through unchanged.<br>
 **Manual Override:** When text is entered in the text input field, it uses that text instead of any passthrough input.<br>
 **Standalone Mode:** Functions as a simple text input node when no passthrough connection is made.
+
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-7527.png)
+![ComfyUI Screenshot](https://gseth.com/images/SNAG-7528.png)
 
 **YouTube tutorial for HiDream Perturbated Pipeline: Coming Soon**
 
