@@ -29,7 +29,7 @@ This repository contains custom nodes designed for the ComfyUI framework, focusi
   - Flux Attention Control
   - Region Overlay Visualizer
   - Flux Attention Cleanup
- - HiDream
+- HiDream
   - HiDream Resolution (New, June 2025)
 - Utility
   - Text Bridge (New, June 2025)
