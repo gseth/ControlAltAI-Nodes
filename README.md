@@ -315,12 +315,12 @@ Simple Splitting Blend: Base Conditioning + 1 Region
 **Example 7**<br>
 Color Manipulation: Base Conditioning (ignored) + 2 Regions
 ![ComfyUI Screenshot](https://gseth.com/images/region_control_15.png)
-![ComfyUI Screenshot](https://gseth.com/images/region_control_16.png)
+![ComfyUI Screenshot](https://gseth.com/images/region_control_16_1.png)
 
 **YouTube tutorial Flux Region Usage: <a href="https://youtu.be/kNwz6kJRDc0">Flux Region Spatial Control Tutorial</a>**
 
 ### HiDream Resolution
-HiDream supports hard-coded resolutions, similar to SDXL, and is very different from the pixel-based resolution supported by Flux.
+HiDream supports hard-coded resolutions, similar to SDXL, and differs significantly from the pixel-based resolution supported by Flux.
 
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-7524.png)
 ![ComfyUI Screenshot](https://gseth.com/images/SNAG-7525.png)
