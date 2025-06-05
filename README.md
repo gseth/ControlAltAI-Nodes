@@ -350,7 +350,7 @@ For more details on these models, their capabilities, and licensing information,
 
 ### HiDream
 
-<a href="https://github.com/HiDream-ai/HiDream-I1">HiDream-I1 GitHub</a>: A High-Efficient Image Generative Foundation Model with Sparse Diffusion Transformer.
+<a href="https://github.com/HiDream-ai/HiDream-I1">HiDream-I1 GitHub:</a> A High-Efficient Image Generative Foundation Model with Sparse Diffusion Transformer.
 
 ### Flux Regional Spatial Control Acknowledgment
 
